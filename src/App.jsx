@@ -41,15 +41,19 @@ const TODAY = new Date(2026, 3, 2);
 const STORAGE_KEY = "vaxtmanual_history";
 const RETENTION_DAYS = 7;
 
-function loadHistory() {
+async function loadHistoryFromServer() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const res = await fetch("/api/history");
+    return res.ok ? await res.json() : {};
   } catch { return {}; }
 }
 
-function saveHistory(h) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(h)); } catch {}
+function saveHistoryToServer(h) {
+  fetch("/api/history", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(h),
+  }).catch(() => {});
 }
 
 function purgeOld(h) {
@@ -95,9 +99,14 @@ function plantDays(pid) {
 
 export default function VäxtManual() {
   const [tab, setTab] = useState("schema");
-  const [history, setHistory] = useState(() => purgeOld(loadHistory()));
+  const [history, setHistory] = useState({});
+  const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => { saveHistory(history); }, [history]);
+  useEffect(() => {
+    loadHistoryFromServer().then(h => { setHistory(purgeOld(h)); setLoaded(true); });
+  }, []);
+
+  useEffect(() => { if (loaded) saveHistoryToServer(history); }, [history, loaded]);
 
   const toggle = (dateStr, pid) => {
     setHistory(prev => {
