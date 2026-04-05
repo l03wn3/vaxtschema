@@ -99,7 +99,7 @@ function fmtDate(d) {
 
 function generateUpcoming() {
   const events = [];
-  for (let d = 1; d <= 14; d++) {
+  for (let d = 0; d <= 14; d++) {
     const date = new Date(TODAY);
     date.setDate(TODAY.getDate() + d);
     const dow = date.getDay();
