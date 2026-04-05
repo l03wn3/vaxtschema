@@ -57,7 +57,7 @@ const plantData = {
 };
 
 const weeklyMap = {
-  1: [5, 7, 8, 13, 17, 21],
+  5: [5, 7, 8, 13, 17, 21],
   3: [1, 2, 3, 6, 12, 16, 18, 19],
   0: [4, 5, 7, 8, 9, 10, 11, 13, 17, 21],
 };
@@ -115,9 +115,9 @@ function generateUpcoming() {
 
 function plantDays(pid) {
   const d = [];
-  if (weeklyMap[1]?.includes(pid)) d.push("Mån");
-  if (weeklyMap[3]?.includes(pid)) d.push("Ons");
   if (weeklyMap[0]?.includes(pid)) d.push("Sön");
+  if (weeklyMap[3]?.includes(pid)) d.push("Ons");
+  if (weeklyMap[5]?.includes(pid)) d.push("Fre");
   if (rareGroup.includes(pid)) d.push("10–14d");
   return d;
 }
@@ -246,7 +246,7 @@ export default function VäxtManual() {
         <div className="hdr-top">
           <div>
             <div className="hdr-title">🌿 Växtmanual</div>
-            <div className="hdr-sub">21 VÄXTER · MÅN / ONS / SÖN</div>
+            <div className="hdr-sub">21 VÄXTER · SÖN / ONS / FRE</div>
             <div className="version-badge">{VERSION} · {CHANGELOG}</div>
           </div>
           {lastWateredLabel(history) && <div className="badge-today">{lastWateredLabel(history)}</div>}
@@ -258,7 +258,7 @@ export default function VäxtManual() {
       </div>
 
       {tab === "schema" && (
-        <div className="notice">📅 <strong>Schema: Måndag + Onsdag + Söndag.</strong></div>
+        <div className="notice">📅 <strong>Schema: Söndag + Onsdag + Fredag.</strong></div>
       )}
 
       <div className="content">
@@ -300,9 +300,9 @@ export default function VäxtManual() {
           <>
             <p className="all-disclaimer">Arterna nedan är förslag baserade på bilderna — bekräfta gärna!</p>
             {[
-              { label: "Måndag", ids: [5, 7, 8, 13, 17, 21] },
+              { label: "Söndag", ids: [4, 5, 7, 8, 9, 10, 11, 13, 17, 21] },
               { label: "Onsdag", ids: [1, 2, 3, 6, 12, 16, 18, 19] },
-              { label: "Söndag", ids: [4, 9, 10, 11] },
+              { label: "Fredag", ids: [5, 7, 8, 13, 17, 21] },
               { label: "Var 10–14 dag", ids: [14, 15, 20] },
             ].map(group => (
               <div key={group.label}>
