@@ -3,68 +3,18 @@ import { useState, useEffect } from "react";
 const VERSION = __APP_VERSION__;
 const CHANGELOG = __APP_CHANGELOG__;
 
-// Thumbnails in /public/plants/, high-res in /public/plants/hires/
-const plantImages = Object.fromEntries(
-  Array.from({length: 21}, (_, i) => [i + 1, `/plants/plant_${i + 1}.jpg`])
-);
-const plantImagesHires = Object.fromEntries(
-  Array.from({length: 21}, (_, i) => [i + 1, `/plants/hires/plant_${i + 1}.jpg`])
-);
-
-const plantData = {
-  1:  { rule: "LÃ¤tt fuktig jord",                    id: "Begonia rex",                   color: "#B85C38",
-        wiki: "Begonia rex Ã¤r en art i begoniaslÃ¤ktet, ursprungligen frÃ¥n nordÃ¶stra Indien. Den odlas frÃ¤mst fÃ¶r sina spektakulÃ¤ra, mÃ¶nstrade blad som kan ha fÃ¤rger i silver, rosa, lila och grÃ¶nt. Trivs i indirekt ljus och vill ha jÃ¤mnt fuktig jord utan att stÃ¥ blÃ¶t." },
-  2:  { rule: "LÃ¥t torka ut",                         id: "Spindelplanta (Chlorophytum)",  color: "#5A8A5E",
-        wiki: "Ampellilja (Chlorophytum comosum) Ã¤r en vÃ¤xtart i familjen sparrisvÃ¤xter frÃ¥n tropiska Afrika. Den Ã¤r en av vÃ¤rldens mest populÃ¤ra krukvÃ¤xter tack vare sin hÃ¤rdighet och luftrenande egenskaper. Plantan bildar lÃ¥nga utlÃ¶pare med smÃ¥plantor som hÃ¤nger ned som spindlar." },
-  3:  { rule: "Stick fingret 3â€“5 cm â€” torr? Vattna", id: "Monstera / Philodendron",       color: "#5A8A5E",
-        wiki: "Monstera deliciosa, Ã¤ven kallad Adams revben efter bladens karaktÃ¤ristiska hÃ¥l och flikar, Ã¤r en klÃ¤ttervÃ¤xt frÃ¥n Centralamerikas tropiska skogar. Den Ã¤r en av de mest populÃ¤ra krukvÃ¤xterna och kan bli mycket stor inomhus. Trivs i indirekt ljus och vill ha vÃ¤ldrÃ¤nerad jord som fÃ¥r torka upp nÃ¥got mellan vattningarna." },
-  4:  { rule: "Lite vatten, sÃ¤llan",                  id: "Hyacint / Tulpan (lÃ¶k)",        color: "#8A6AAB",
-        wiki: "Hyacint Ã¤r en flerÃ¥rig blommande lÃ¶kvÃ¤xt med ursprung i sydÃ¶stra Turkiet och Levantens medelhavskust. Den kom troligen till Sverige under 1600-talet och Ã¤r mest kÃ¤nd fÃ¶r sina flockar av doftande, fÃ¤rgglada blommor i blÃ¥tt, vitt, rosa, rÃ¶tt eller lila. Blommar pÃ¥ vÃ¥ren och behÃ¶ver lite vatten under viloperiodens." },
-  5:  { rule: "HÃ¥ll jÃ¤mnt fuktig",                    id: "Begonia / Caladium",            color: "#B85C38",
-        wiki: "BegoniaslÃ¤ktet (Begonia) Ã¤r ett av de tio artrikaste slÃ¤ktena bland gÃ¶mfrÃ¶vÃ¤xter med ungefÃ¤r 1 800 arter. De flesta kommer frÃ¥n tropiska och subtropiska omrÃ¥den. Odlas som krukvÃ¤xter fÃ¶r sina dekorativa blad eller vackra blommor och trivs i jÃ¤mnt fuktig, vÃ¤ldrÃ¤nerad jord." },
-  6:  { rule: "Lite vatten, lÃ¥t nÃ¤stan torka",        id: "Tropisk buske (Kroton)",        color: "#5A8A5E",
-        wiki: "Kroton (Codiaeum variegatum) Ã¤r en tÃ¶relvÃ¤xt som fÃ¶rst beskrevs av Carl von LinnÃ©. Namnet kommer frÃ¥n malajiska 'kodiho' och latin 'variegatum' (brokig). KÃ¤nd fÃ¶r sina intensivt fÃ¤rgade blad i gult, orange, rÃ¶tt och grÃ¶nt. Trivs i starkt ljus och vill torka upp nÃ¥got mellan vattningarna." },
-  7:  { rule: "Alltid fuktig",                        id: "VattenvÃ¤xt / stickling i glas", color: "#3A7A9A",
-        wiki: "En stickling Ã¤r en avskuren stam-, gren- eller rotdel av en vÃ¤xt som sÃ¤tts i vatten eller jord fÃ¶r att slÃ¥ rot och bilda en ny planta. Sticklingar i vatten bÃ¶r skyddas frÃ¥n direkt ljus pÃ¥ rotdelen. MÃ¥nga tropiska krukvÃ¤xter som pothos och monstera rotar sig lÃ¤tt i vatten." },
-  8:  { rule: "Torkar snabbt â€” kolla ofta",           id: "Pothos / Epipremnum",           color: "#5A8A5E",
-        wiki: "Gullranka (Epipremnum aureum) Ã¤r en art i familjen kallavÃ¤xter som fÃ¶rekommer naturligt pÃ¥ SÃ¤llskapsÃ¶arna. I Sverige Ã¤r den en mycket vanlig och populÃ¤r krukvÃ¤xt. Den Ã¤r lÃ¤ttskÃ¶tt och tÃ¥lig, med hjÃ¤rtformade blad som ofta har gula eller vita mÃ¶nster. KlÃ¤ttrar eller hÃ¤nger och renar luften." },
-  9:  { rule: "Lite vatten, sÃ¤llan",                  id: "LÃ¶kvÃ¤xt (hyacint?)",            color: "#8A6AAB",
-        wiki: "Hyacint Ã¤r en flerÃ¥rig blommande lÃ¶kvÃ¤xt med ursprung i sydÃ¶stra Turkiet. BlomfÃ¤rgen kan vara blÃ¥, vit, ljusgul, rosa, rÃ¶d eller lila. Under viloperioden behÃ¶ver lÃ¶ken torrt och svalt. Vattna sparsamt â€” lÃ¶kar ruttnar lÃ¤tt av fÃ¶r mycket fukt." },
-  10: { rule: "Lite vatten, sÃ¤llan",                  id: "LÃ¶kvÃ¤xt",                       color: "#8A6AAB",
-        wiki: "LÃ¶kvÃ¤xter lagrar energi i en underjordisk lÃ¶k och har ofta en tydlig viloperiod. Under aktiv tillvÃ¤xt och blomning behÃ¶ver de mÃ¥ttligt med vatten, men under vila ska jorden vara nÃ¤stan torr. Vanliga lÃ¶kvÃ¤xter inomhus inkluderar hyacint, amaryllis och tulpan." },
-  11: { rule: "LÃ¤tt fuktig jord",                     id: "Spindelplanta / GrÃ¤svÃ¤xt",      color: "#5A8A5E",
-        wiki: "Ampellilja (Chlorophytum comosum) Ã¤r en vÃ¤xtart i familjen sparrisvÃ¤xter frÃ¥n tropiska Afrika. Den Ã¤r extremt tÃ¥lig och anpassningsbar, och klarar bÃ¥de torka och Ã¶vervattning bÃ¤ttre Ã¤n de flesta krukvÃ¤xter. Perfekt fÃ¶r nybÃ¶rjare och kÃ¤nd fÃ¶r att rena luften." },
-  12: { rule: "KÃ¤nn pÃ¥ jorden â€” vattna vid behov",    id: "HÃ¤ngande tropisk",              color: "#5A8A5E",
-        wiki: "TremastarblomsslÃ¤ktet (Tradescantia), Ã¤ven kallade bÃ¥tblommor, Ã¤r ett vÃ¤xtslÃ¤kte i familjen himmelsblommevÃ¤xter. Flera arter odlas som krukvÃ¤xter fÃ¶r sina dekorativa, ofta randiga blad i grÃ¶nt, lila och silver. De vÃ¤xer snabbt som hÃ¤ngvÃ¤xter och Ã¤r lÃ¤tta att fÃ¶rÃ¶ka med sticklingar." },
-  13: { rule: "Aldrig torr â€” vattna frikostigt",      id: "Ormbunke (Nephrolepis)",        color: "#3A7A9A",
-        wiki: "Nephrolepis (svÃ¤rdsbrÃ¤ken) Ã¤r ett slÃ¤kte av brÃ¤kenvÃ¤xter. Den vanligaste arten i odling Ã¤r Nephrolepis exaltata, kÃ¤nd som BostonbrÃ¤ken. Den trivs i hÃ¶g luftfuktighet och jÃ¤mnt fuktig jord â€” lÃ¥t den aldrig torka ut helt. Perfekt fÃ¶r badrum eller kÃ¶k." },
-  14: { rule: "LÃ¥t torka helt ut",                    id: "Epiphyllum / Ã–kenvÃ¤xt",         color: "#9A7A1A",
-        wiki: "BladkaktusslÃ¤ktet (Epiphyllum) omfattar 15â€“20 arter inom familjen kaktusvÃ¤xter, ursprungligen frÃ¥n Centralamerika och Mexiko. Till skillnad frÃ¥n Ã¶kenkaktus Ã¤r de flesta epifyter som vÃ¤xer pÃ¥ trÃ¤d i tropisk regnskog. De har platta, bladlika stammar och behÃ¶ver torka ut ordentligt mellan vattningarna." },
-  15: { rule: "LÃ¥t Ã¶versta lagret torka",             id: "Monstera",                      color: "#5A8A5E",
-        wiki: "Monstera deliciosa, Ã¤ven kallad Adams revben, Ã¤r den vanligaste arten i monsteraslÃ¤ktet. De karaktÃ¤ristiska hÃ¥len i bladen utvecklas nÃ¤r plantan mognar. Ursprungligen en klÃ¤ttervÃ¤xt frÃ¥n Centralamerikas regnskogar. LÃ¥t Ã¶versta jordlagret torka mellan vattningarna â€” den ska inte torka ut helt." },
-  16: { rule: "Torkar snabbt â€” kolla ofta",           id: "Caladium / Coleus",             color: "#B85C38",
-        wiki: "Palettblad (Coleus/Plectranthus scutellarioides) Ã¤r en flerÃ¥rig Ã¶rt med flerfÃ¤rgade blad, ursprungligen frÃ¥n Sydostasien. Plantan blir 30â€“80 cm hÃ¶g och blommar juniâ€“oktober. KÃ¤nd fÃ¶r sina spektakulÃ¤ra blad i kombinationer av grÃ¶nt, rÃ¶tt, rosa, gult och lila. Torkar snabbt och vill ha jÃ¤mnt fuktig jord." },
-  17: { rule: "Fuktig jord + duscha bladen",          id: "Colocasia / Alocasia",          color: "#3A7A9A",
-        wiki: "AlokasiaslÃ¤ktet (Alocasia) omfattar cirka 70 arter i familjen kallavÃ¤xter, frÃ¤mst frÃ¥n sydÃ¶stra Asien. De har stora, dekorativa blad och kallas ibland \"elefantÃ¶ron\". Trivs i hÃ¶g luftfuktighet och jÃ¤mnt fuktig jord. Duscha gÃ¤rna bladen regelbundet fÃ¶r att hÃ¥lla dem friska." },
-  18: { rule: "Vattna nÃ¤r den bÃ¶rjar hÃ¤nga",          id: "Oxalis / Begonia (rÃ¶d)",        color: "#8A3A3A",
-        wiki: "Harsyra (Oxalis) Ã¤r ett slÃ¤kte i familjen harsyrevÃ¤xter. Bladen Ã¤r Ã¤tbara med en syrlig smak som kommer av oxalsyra. MÃ¥nga arter odlas som krukvÃ¤xter fÃ¶r sina dekorativa, trefingrade blad som fÃ¤lls ihop pÃ¥ natten. Signalerar tydligt nÃ¤r den behÃ¶ver vatten genom att bladen hÃ¤nger." },
-  19: { rule: "LÃ¥t torka ut",                         id: "GrÃ¤shÃ¤ngare (Carex/Chlor.)",    color: "#5A8A5E",
-        wiki: "Ampellilja (Chlorophytum comosum) Ã¤r en vÃ¤xtart i familjen sparrisvÃ¤xter frÃ¥n tropiska Afrika. Som hÃ¤ngvÃ¤xt bildar den eleganta utlÃ¶pare med smÃ¥plantor. Extremt tÃ¥lig och klarar perioder av torka bra, men trivs bÃ¤st med regelbunden vattning dÃ¤r jorden fÃ¥r torka ut emellan." },
-  20: { rule: "SÃ¤llan, men vattna ordentligt",        id: "Monstera / Alocasia (stor)",    color: "#9A7A1A",
-        wiki: "Monstera deliciosa kan bli mycket stor inomhus med blad som nÃ¥r Ã¶ver en meter i diameter. Som regnvÃ¤xt vill den ha ordentligt med vatten nÃ¤r den vattnas, men tÃ¥l att jorden torkar ut en del mellan vattningarna. Ge den en stÃ¶ttpinne eller mosstotem att klÃ¤ttra pÃ¥ fÃ¶r bÃ¤sta tillvÃ¤xt." },
-  21: { rule: "KÃ¤nn pÃ¥ jorden â€” vattna vid behov",    id: "Fredslilja (Spathiphyllum)",    color: "#3A7A9A",
-        wiki: "Fredslilja (Spathiphyllum) Ã¤r en populÃ¤r krukvÃ¤xt i familjen kallavÃ¤xter, ursprungligen frÃ¥n tropiska Amerika och sydÃ¶stra Asien. KÃ¤nd fÃ¶r sina eleganta vita blommor och mÃ¶rkgrÃ¶na, blanka blad. En av de bÃ¤sta luftrenande vÃ¤xterna enligt NASA. Signalerar tydligt nÃ¤r den behÃ¶ver vatten genom att bladen sjunker." },
-};
-
-const weeklyMap = {
-  0: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 21],
-  3: [1, 3, 5, 7, 8, 12, 13, 16, 17, 18, 21],
-  5: [5, 7, 8, 13, 17, 21],
-};
-const rareGroup = [14, 15, 20];
+const SW = ["SÃ¶ndag","MÃ¥ndag","Tisdag","Onsdag","Torsdag","Fredag","LÃ¶rdag"];
+const MON = ["jan","feb","mar","apr","maj","jun","jul","aug","sep","okt","nov","dec"];
 const TODAY = new Date();
 const STORAGE_KEY = "vaxtmanual_history";
 const RETENTION_DAYS = 7;
+
+async function loadPlants() {
+  try {
+    const res = await fetch("/api/plants");
+    return res.ok ? await res.json() : [];
+  } catch { return []; }
+}
 
 async function loadHistoryFromServer() {
   try {
@@ -81,6 +31,18 @@ function saveHistoryToServer(h) {
   }).catch(() => {});
 }
 
+async function savePlantsToServer(plants) {
+  try {
+    await fetch("/api/plants", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plants }),
+    });
+  } catch (err) {
+    console.error("Failed to save plants:", err);
+  }
+}
+
 function purgeOld(h) {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - RETENTION_DAYS);
@@ -90,14 +52,34 @@ function purgeOld(h) {
   return cleaned;
 }
 
-const SW = ["SÃ¶ndag","MÃ¥ndag","Tisdag","Onsdag","Torsdag","Fredag","LÃ¶rdag"];
-const MON = ["jan","feb","mar","apr","maj","jun","jul","aug","sep","okt","nov","dec"];
-
 function fmtDate(d) {
   return `${["SÃ¶n","MÃ¥n","Tis","Ons","Tor","Fre","LÃ¶r"][d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
 }
 
-function generateUpcoming() {
+// Helper to derive weeklyMap and rareGroup from plants
+function deriveScheduleMaps(plants) {
+  const weeklyMap = { 0: [], 3: [], 5: [] };
+  const rareGroup = [];
+
+  plants.forEach((p, idx) => {
+    const pid = idx + 1; // 1-based plant ID
+    if (!Array.isArray(p.schedule)) return;
+
+    if (p.schedule.includes("rare")) {
+      rareGroup.push(pid);
+    } else {
+      p.schedule.forEach(day => {
+        if (day in weeklyMap && !weeklyMap[day].includes(pid)) {
+          weeklyMap[day].push(pid);
+        }
+      });
+    }
+  });
+
+  return { weeklyMap, rareGroup };
+}
+
+function generateUpcoming(plants, weeklyMap, rareGroup) {
   const events = [];
   for (let d = 0; d <= 14; d++) {
     const date = new Date(TODAY);
@@ -108,12 +90,14 @@ function generateUpcoming() {
   }
   const rareDate = new Date(TODAY);
   rareDate.setDate(TODAY.getDate() + 12);
-  events.push({ date: rareDate, dayName: "Var 10â€“14 dag", plants: rareGroup, isRare: true });
+  if (rareGroup.length > 0) {
+    events.push({ date: rareDate, dayName: "Var 10â€“14 dag", plants: rareGroup, isRare: true });
+  }
   events.sort((a, b) => a.date - b.date);
   return events;
 }
 
-function plantDays(pid) {
+function plantDays(pid, weeklyMap, rareGroup) {
   const d = [];
   if (weeklyMap[0]?.includes(pid)) d.push("SÃ¶n");
   if (weeklyMap[3]?.includes(pid)) d.push("Ons");
@@ -129,26 +113,178 @@ function lastWateredLabel(history) {
   return `ğŸ’§ Vattnade ${last.getDate()} ${MON[last.getMonth()]}`;
 }
 
-function PlantModal({ pid, onClose }) {
-  const p = plantData[pid];
-  if (!p) return null;
+function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose }) {
+  if (!plant) return null;
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>âœ•</button>
-        <img src={plantImagesHires[pid]} alt={p.id} className="modal-img" />
-        <div className="modal-badge" style={{ background: p.color }}>#{pid}</div>
+        <img src={`/plants/hires/${plant.image}`} alt={plant.id} className="modal-img" />
+        <div className="modal-badge" style={{ background: plant.color }}>#{pid}</div>
         <div className="modal-body">
-          <h2 className="modal-title">{p.id}</h2>
+          <h2 className="modal-title">{plant.id}</h2>
           <div className="modal-rule">
             <span className="modal-rule-icon">ğŸ’§</span>
-            {p.rule}
+            {plant.rule}
           </div>
           <div className="modal-schedule">
-            {plantDays(pid).map(d => <span key={d} className="chip">{d}</span>)}
+            {plantDays(pid, weeklyMap, rareGroup).map(d => <span key={d} className="chip">{d}</span>)}
           </div>
-          <p className="modal-wiki">{p.wiki}</p>
+          <p className="modal-wiki">{plant.wiki}</p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminTab({ plants, onSave, onAddPlant }) {
+  const [reordered, setReordered] = useState(plants);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    id: "",
+    rule: "",
+    color: "#5A8A5E",
+    wiki: "",
+    schedule: [0],
+  });
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const colors = [...new Set(plants.map(p => p.color))];
+
+  const moveUp = (idx) => {
+    if (idx === 0) return;
+    const arr = [...reordered];
+    [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
+    setReordered(arr);
+  };
+
+  const moveDown = (idx) => {
+    if (idx === reordered.length - 1) return;
+    const arr = [...reordered];
+    [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
+    setReordered(arr);
+  };
+
+  const handleSave = () => {
+    onSave(reordered);
+  };
+
+  const handleAddPlant = async () => {
+    if (!formData.id || !formData.rule || !selectedFile) {
+      alert("Fyll i alla fÃ¤lt och vÃ¤lj en bild");
+      return;
+    }
+
+    setUploading(true);
+    const uploadFormData = new FormData();
+    uploadFormData.append("image", selectedFile);
+
+    try {
+      const res = await fetch("/api/plants/upload", {
+        method: "POST",
+        body: uploadFormData,
+      });
+      const { filename } = await res.json();
+
+      const newPlant = {
+        ...formData,
+        image: filename,
+      };
+
+      const updatedPlants = [...reordered, newPlant];
+      setReordered(updatedPlants);
+      onAddPlant(updatedPlants);
+
+      setFormData({
+        id: "",
+        rule: "",
+        color: "#5A8A5E",
+        wiki: "",
+        schedule: [0],
+      });
+      setSelectedFile(null);
+      setShowForm(false);
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("Laddningen misslyckades");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="admin-container">
+      <div className="admin-section">
+        <h3 className="admin-title">VÃ¤xtsamling ({reordered.length})</h3>
+        <div className="plant-list">
+          {reordered.map((p, idx) => (
+            <div key={idx} className="admin-plant-row">
+              <img src={`/plants/${p.image}`} alt={p.id} className="admin-thumb" />
+              <div className="admin-plant-info">
+                <div className="admin-plant-name">{p.id}</div>
+                <div className="admin-plant-number">#{idx + 1}</div>
+              </div>
+              <div className="admin-buttons">
+                <button onClick={() => moveUp(idx)} className="admin-btn" disabled={idx === 0}>â¬†</button>
+                <button onClick={() => moveDown(idx)} className="admin-btn" disabled={idx === reordered.length - 1}>â¬‡</button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button onClick={handleSave} className="admin-save-btn">Spara ordning</button>
+      </div>
+
+      <div className="admin-section">
+        <h3 className="admin-title">LÃ¤gg till vÃ¤xt</h3>
+        {!showForm ? (
+          <button onClick={() => setShowForm(true)} className="admin-add-btn">+ LÃ¤gg till ny vÃ¤xt</button>
+        ) : (
+          <div className="admin-form">
+            <input
+              type="text"
+              placeholder="VÃ¤xtens namn"
+              value={formData.id}
+              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+              className="form-input"
+            />
+            <input
+              type="text"
+              placeholder="Vattningsregel"
+              value={formData.rule}
+              onChange={(e) => setFormData({ ...formData, rule: e.target.value })}
+              className="form-input"
+            />
+            <select
+              value={formData.color}
+              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+              className="form-input"
+            >
+              {colors.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <textarea
+              placeholder="VÃ¤xtbeskrivning (wiki)"
+              value={formData.wiki}
+              onChange={(e) => setFormData({ ...formData, wiki: e.target.value })}
+              className="form-input"
+              rows="4"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+              className="form-input"
+            />
+            <div className="form-buttons">
+              <button onClick={handleAddPlant} disabled={uploading} className="form-submit">
+                {uploading ? "Laddar upp..." : "LÃ¤gg till"}
+              </button>
+              <button onClick={() => setShowForm(false)} className="form-cancel">Avbryt</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -156,14 +292,28 @@ function PlantModal({ pid, onClose }) {
 
 export default function VÃ¤xtManual() {
   const [tab, setTab] = useState("schema");
+  const [plants, setPlants] = useState([]);
   const [history, setHistory] = useState({});
   const [loaded, setLoaded] = useState(false);
   const [modalPlant, setModalPlant] = useState(null);
+  const [weeklyMap, setWeeklyMap] = useState({});
+  const [rareGroup, setRareGroup] = useState([]);
 
+  // Load plants and history on mount
   useEffect(() => {
-    loadHistoryFromServer().then(h => { setHistory(purgeOld(h)); setLoaded(true); });
+    Promise.all([loadPlants(), loadHistoryFromServer()]).then(([p, h]) => {
+      setPlants(p);
+      if (p.length > 0) {
+        const { weeklyMap, rareGroup } = deriveScheduleMaps(p);
+        setWeeklyMap(weeklyMap);
+        setRareGroup(rareGroup);
+      }
+      setHistory(purgeOld(h));
+      setLoaded(true);
+    });
   }, []);
 
+  // Save history when it changes
   useEffect(() => { if (loaded) saveHistoryToServer(history); }, [history, loaded]);
 
   const toggle = (dateStr, pid) => {
@@ -179,7 +329,28 @@ export default function VÃ¤xtManual() {
   };
 
   const isChecked = (dateStr, pid) => (history[dateStr] || []).includes(pid);
-  const upcoming = generateUpcoming();
+  const upcoming = generateUpcoming(plants, weeklyMap, rareGroup);
+  const plantCount = plants.length;
+
+  const handleAdminSave = (reorderedPlants) => {
+    setPlants(reorderedPlants);
+    savePlantsToServer(reorderedPlants);
+    const { weeklyMap, rareGroup } = deriveScheduleMaps(reorderedPlants);
+    setWeeklyMap(weeklyMap);
+    setRareGroup(rareGroup);
+  };
+
+  const handleAddPlant = (updatedPlants) => {
+    setPlants(updatedPlants);
+    savePlantsToServer(updatedPlants);
+    const { weeklyMap, rareGroup } = deriveScheduleMaps(updatedPlants);
+    setWeeklyMap(weeklyMap);
+    setRareGroup(rareGroup);
+  };
+
+  if (!loaded) {
+    return <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#F5F0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>Laddar...</div>;
+  }
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#F5F0E8", minHeight: "100vh", color: "#26200F" }}>
@@ -236,17 +407,46 @@ export default function VÃ¤xtManual() {
         .modal-schedule { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
         .modal-wiki { font-size: 14px; line-height: 1.6; color: #4A4030; }
 
+        .admin-container { padding: 14px; }
+        .admin-section { background: white; border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+        .admin-title { font-size: 15px; font-weight: 600; color: #1E3A0E; margin-bottom: 14px; }
+        .plant-list { margin-bottom: 14px; }
+        .admin-plant-row { display: flex; align-items: center; gap: 12px; padding: 12px; background: #F9F6F0; border-radius: 10px; margin-bottom: 10px; }
+        .admin-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; }
+        .admin-plant-info { flex: 1; }
+        .admin-plant-name { font-size: 13px; font-weight: 500; }
+        .admin-plant-number { font-size: 11px; color: #9A8878; margin-top: 2px; }
+        .admin-buttons { display: flex; gap: 8px; }
+        .admin-btn { padding: 8px 12px; background: #1E3A0E; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; }
+        .admin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .admin-save-btn { width: 100%; padding: 12px; background: #1E3A0E; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .admin-add-btn { width: 100%; padding: 12px; background: #8CB87A; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .admin-form { display: flex; flex-direction: column; gap: 12px; }
+        .foÉ´µ¥¹ÁÕĞìÁ…‘‘¥¹œè€ÄÁÁà€ÄÉÁàì‰½É‘•Èè€ÅÁàÍ½±¥€áÁÔì‰½É‘•ÈµÉ…‘¥ÕÌè€áÁàì™½¹Ğµ™…µ¥±äè€4M…¹Ìœ°Í…¹ÌµÍ•É¥˜ì™½¹ĞµÍ¥é”è€ÄÍÁàìô(€€€€€€€€¹™½É´µ¥¹ÁÕĞé™½ÕÌì½ÕÑ±¥¹”è¹½¹”ì‰½É‘•Èµ½±½Èè€Œáàİìô(€€€€€€€€¹™½É´µ‰ÕÑÑ½¹Ìì‘¥ÍÁ±…äè™±•àì…Àè€ÄÁÁàìô(€€€€€€€€¹™½É´µÍÕ‰µ¥Ğì™±•àè€ÄìÁ…‘‘¥¹œè€ÄÁÁàì‰…­É½Õ¹è€Œáàİì½±½Èèİ¡¥Ñ”ì‰½É‘•Èè¹½¹”ì‰½É‘•ÈµÉ…‘¥ÕÌè€áÁàì™½¹Ğµİ•¥¡Ğè€ØÀÀìÕÉÍ½ÈèÁ½¥¹Ñ•Èìô(€€€€€€€€¹™½É´µ…¹•°ì™±•àè€ÄìÁ…‘‘¥¹œè€ÄÁÁàì‰…­É½Õ¹è€áÁÔì½±½Èè€ŒÙÔÔÌàì‰½É‘•Èè¹½¹”ì‰½É‘•ÈµÉ…‘¥ÕÌè€áÁàì™½¹Ğµİ•¥¡Ğè€ØÀÀìÕÉÍ½ÈèÁ½¥¹Ñ•Èìô((€€€€€€€­•å™É…µ•Ì™…‘•%¸ì™É½´ì½Á…¥Ñäè€ÀìôÑ¼ì½Á…¥Ñäè€Äìôô(€€€€€€€­•å™É…µ•ÌÍ±¥‘•UÀì™É½´ìÑÉ…¹Í™½É´èÑÉ…¹Í±…Ñ•d ÄÀÀ”¤ìôÑ¼ìÑÉ…¹Í™½É´èÑÉ…¹Í±…Ñ•d À¤ìôô(€€€€€ôğ½ÍÑå±”ø((€€€€€íµ½‘…±A±…¹Ğ€„ôô¹Õ±°€˜˜€ñA±…¹Ñ5½‘…°(€€€€€€€Á±…¹ĞõíÁ±…¹ÑÍmµ½‘…±A±…¹Ğ€´€Åuô(€€€€€€€Á¥õíµ½‘…±A±…¹Ñô(€€€€€€€İ••­±å5…Àõíİ••­±å5…Áô(€€€€€€€É…É•É½ÕÀõíÉ…É•É½ÕÁô(€€€€€€€½¹±½Í”õì ¤€ôøÍ•Ñ5½‘…±A±…¹Ğ¡¹Õ±°¥ô(€€€€€€¼ùô((€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘Èˆø(€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘ÈµÑ½Àˆø(€€€€€€€€€€ñ‘¥Øø(€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘ÈµÑ¥Ñ±”ˆûÂ~2ü[‘áÑµ…¹Õ…°ğ½‘¥Øø(€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘ÈµÍÕˆˆùíÁ±…¹Ñ½Õ¹Ñô[aQHƒ
+ÜOY8€¼=9L€¼Iğ½‘¥Øø(€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ù•ÉÍ¥½¸µ‰…‘”ˆùíYIM%=9ôƒ
+Üí!91=ôğ½‘¥Øø(€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€í±…ÍÑ]…Ñ•É•‘1…‰•°¡¡¥ÍÑ½Éä¤€˜˜€ñ‘¥Ø±…ÍÍ9…µ”ô‰‰…‘”µÑ½‘…äˆùí±…ÍÑ]…Ñ•É•‘1…‰•°¡¡¥ÍÑ½Éä¥ôğ½‘¥Øùô(€€€€€€€€ğ½‘¥Øø(€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ…‰Ìˆø(€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÍ9…µ”õíÑ…ˆµ‰Ñ¸€‘íÑ…ˆ€ôôô€‰Í¡•µ„ˆ€ü€‰…Ñ¥Ù”ˆ€è€ˆ‰õô½¹±¥¬õì ¤€ôøÍ•ÑQ…ˆ ‰Í¡•µ„ˆ¥ôù-½µµ…¹‘”ğ½‰ÕÑÑ½¸ø(€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÍ9…µ”õíÑ…ˆµ‰Ñ¸€‘íÑ…ˆ€ôôô€‰Á±…¹ÑÌˆ€ü€‰…Ñ¥Ù”ˆ€è€ˆ‰õô½¹±¥¬õì ¤€ôøÍ•ÑQ…ˆ ‰Á±…¹ÑÌˆ¥ôù±±„Û‘áÑ•Èğ½‰ÕÑÑ½¸ø(€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÍ9…µ”õíÑ…ˆµ‰Ñ¸€‘íÑ…ˆ€ôôô€‰…‘µ¥¸ˆ€ü€‰…Ñ¥Ù”ˆ€è€ˆ‰õô½¹±¥¬õì ¤€ôøÍ•ÑQ…ˆ ‰…‘µ¥¸ˆ¥ôù‘µ¥¸ğ½‰ÕÑÑ½¸ø(€€€€€€€€ğ½‘¥Øø(€€€€€€ğ½‘¥Øø((€€€€€íÑ…ˆ€ôôô€‰Í¡•µ„ˆ€˜˜€ (€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¹½Ñ¥”ˆûÂ~N€ñÍÑÉ½¹œùM¡•µ„èOÙ¹‘…œ€¬=¹Í‘…œ€¬É•‘…œ¸ğ½ÍÑÉ½¹œøğ½‘¥Øø(€€€€€€¥ô((€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰½¹Ñ•¹Ğˆø(€€€€€€€íÑ…ˆ€ôôô€‰Í¡•µ„ˆ€ü€ (€€€€€€€€€ÕÁ½µ¥¹œ¹µ…À ¡•Ø°¤¤€ôøì(€€€€€€€€€€€½¹ÍĞ‘…Ñ•MÑÈ€ô•Ø¹‘…Ñ”¹Ñ½%M=MÑÉ¥¹œ ¤¹ÍÁ±¥Ğ ‰Pˆ¥lÁtì(€€€€€€€€€€€½¹ÍĞ…±±½¹”€ô•Ø¹Á±…¹ÑÌ¹•Ù•Éä¡Á¥€ôø¥Í¡•­•¡‘…Ñ•MÑÈ°Á¥¤¤ì(€€€€€€€€€€€É•ÑÕÉ¸€ (€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰‘…äµ…Éˆ­•äõí¥ôÍÑå±”õíì½Á…¥Ñäè…±±½¹”€ü€À¸Ø€è€Äõôø(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰‘…äµ¡‘Èˆø(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰‘…äµ¡‘Èµ¹…µ”ˆùí•Ø¹‘…å9…µ•ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€ñ‘¥ØÍÑå±”õíì‘¥ÍÁ±…äè€‰™±•àˆ°…±¥¹%Ñ•µÌè€‰•¹Ñ•Èˆõôø(€€€€€€€€€€€€€€€€€€€í•Ø¹¥ÍI…É”€˜˜€ñÍÁ…¸±…ÍÍ9…µ”ô‰É…É”µÁ¥±°ˆøÄÃŠLÄĞ‘…œğ½ÍÁ…¸ùô(€€€€€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÍ9…µ”ô‰‘…äµ¡‘Èµ‘…Ñ”ˆùí™µÑ…Ñ”¡•Ø¹‘…Ñ”¥ôğ½ÍÁ…¸ø(€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€í•Ø¹Á±…¹ÑÌ¹µ…À¡Á¥€ôøì(€€€€€€€€€€€€€€€€€½¹ÍĞÀ€ôÁ±…¹ÑÍmÁ¥€´€Åtì(€€€€€€€€€€€€€€€€€¥˜€ …À¤É•ÑÕÉ¸¹Õ±°ì(€€€€€€€€€€€€€€€€€½¹ÍĞ‘½¹”€ô¥Í¡•­•¡‘…Ñ•MÑÈ°Á¥¤ì(€€€€€€€€€€€€€€€€€É•ÑÕÉ¸€ (€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰ÀµÉ½Üˆ­•äõíÁ¥‘ôø(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆˆ½¹±¥¬õì¡”¤€ôøì”¹ÍÑ½ÁAÉ½Á……Ñ¥½¸ ¤ìÍ•Ñ5½‘…±A±…¹Ğ¡Á¥¤ìõôø(€€€€€€€€€€€€€€€€€€€€€€€€ñ¥µœÍÉŒõí€½Á±…¹ÑÌ¼‘íÀ¹¥µ…•õô…±Ğõí[‘áĞ€Œ‘íÁ¥‘õôİ¥‘Ñ õìĞáô¡•¥¡ĞõìĞáô(€€€€€€€€€€€€€€€€€€€€€€€€€ÍÑå±”õíì½Á…¥Ñäè‘½¹”€ü€À¸Ğ€è€Ä°™¥±Ñ•Èè‘½¹”€ü€‰É…åÍ…±” àÀ”¤ˆ€è€‰¹½¹”ˆõô€¼ø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆµ‰…‘”ˆÍÑå±”õíì‰…­É½Õ¹è‘½¹”€ü€ˆÑáàˆ€èÀ¹½±½ÈõôùíÁ¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Àµ¥¹™¼ˆ½¹±¥¬õì ¤€ôøÑ½±”¡‘…Ñ•MÑÈ°Á¥¥ôÍÑå±”õíì½Á…¥Ñäè‘½¹”€ü€À¸Ô€è€Äõôø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰ÀµÍÁ•¥•ÌˆùíÀ¹¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰ÀµÉÕ±”ˆùíÀ¹ÉÕ±•ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Àµ¡•¬ˆ½¹±¥¬õì ¤€ôøÑ½±”¡‘…Ñ•MÑÈ°Á¥¥ôùí‘½¹”€ü€‹Šrˆ€è€‹Š^,‰ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€¤ì(€€€€€€€€€€€€€€€ô¥ô(€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€¤ì(€€€€€€€€€ô¤(€€€€€€€€¤€èÑ…ˆ€ôôô€‰Á±…¹ÑÌˆ€ü€ (€€€€€€€€€€ğø(€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰…±°µ‘¥Í±…¥µ•ÈˆùÉÑ•É¹„¹•‘…¸ƒ‘È›ÙÉÍ±…œ‰…Í•É…‘”Ã”‰¥±‘•É¹„ƒŠP‰•­Ë‘™Ñ„Ÿ‘É¹„„ğ½Àø(€€€€€€€€€€€íl(€€€€€€€€€€€€€ì±…‰•°è€‰	…É„ÏÙ¹‘…œˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì À¤€˜˜€…À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ì¤€˜˜€…À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ô¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€€€ì±…‰•°è€‰OÙ¹‘…œ€¬½¹Í‘…œˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì À¤€˜˜À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ì¤€˜˜€…À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ô¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€€€ì±…‰•°è€‰OÙ¸€¬½¹Ì€¬™É”ˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì À¤€˜˜À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ì¤€˜˜À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ô¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€€€ì±…‰•°è€‰Y…È€ÄÃŠLÄĞ‘…œˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì ‰É…É”ˆ¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€t¹µ…À¡É½ÕÀ€ôøÉ½ÕÀ¹¥‘Ì¹±•¹Ñ €ø€À€˜˜€ (€€€€€€€€€€€€€€ñ‘¥Ø­•äõíÉ½ÕÀ¹±…‰•±ôø(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Í•Œµ±…‰•°ˆùíÉ½ÕÀ¹±…‰•±ôğ½‘¥Øø(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µ…Éˆø(€€€€€€€€€€€€€€€€€íÉ½ÕÀ¹¥‘Ì¹µ…À¡Á¥€ôøì(€€€€€€€€€€€€€€€€€€€½¹ÍĞÀ€ôÁ±…¹ÑÍmÁ¥€´€Åtì(€€€€€€€€€€€€€€€€€€€¥˜€ …À¤É•ÑÕÉ¸¹Õ±°ì(€€€€€€€€€€€€€€€€€€€É•ÑÕÉ¸€ (€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µÉ½Üˆ­•äõíÁ¥‘ô½¹±¥¬õì ¤€ôøÍ•Ñ5½‘…±A±…¹Ğ¡Á¥¥ôø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆˆø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ¥µœÍÉŒõí€½Á±…¹ÑÌ¼‘íÀ¹¥µ…•õô…±Ğõí[‘áĞ€Œ‘íÁ¥‘õôİ¥‘Ñ õìÔÉô¡•¥¡ĞõìÔÉô€¼ø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆµ‰…‘”ˆÍÑå±”õíì‰…­É½Õ¹èÀ¹½±½ÈõôùíÁ¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µÉ½ÜµÉ¥¡Ğˆø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µ¹…µ”ˆùíÀ¹ÉÕ±•ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µÍÁ•¥•ÌˆùíÀ¹¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡¥ÁÌˆùíÁ±…¹Ñ…åÌ¡Á¥°İ••­±å5…À°É…É•É½ÕÀ¤¹µ…À¡€ôø€ñÍÁ…¸­•äõí‘ô±…ÍÍ9…µ”ô‰¡¥Àˆùí‘ôğ½ÍÁ…¸ø¥ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€¤ì(€€€€€€€€€€€€€€€€€ô¥ô(€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€¤¥ô(€€€€€€€€€€ğ¼ø(€€€€€€€€¤€è€ (€€€€€€€€€€ñ‘µ¥¹Q…ˆÁ±…¹ÑÌõíÁ±…¹ÑÍô½¹M…Ù”õí¡…¹‘±•‘µ¥¹M…Ù•ô½¹‘‘A±…¹Ğõí¡…¹‘±•‘‘A±…¹Ñô€¼ø(€€€€€€€€¥ô(€€€€€€ğ½‘¥Øø(€€€€ğ½‘¥Øø(€€¤ì)ô+rm-input { padding: 10px 12px; border: 1px solid #E8E0D5; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; }
+        .form-input:focus { outline: none; border-color: #8CB87A; }
+        .form-buttons { display: flex; gap: 10px; }
+        .form-submit { flex: 1; padding: 10px; background: #8CB87A; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .form-cancel { flex: 1; padding: 10px; background: #E8E0D5; color: #6B5538; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
       `}</style>
 
-      {modalPlant && <PlantModal pid={modalPlant} onClose={() => setModalPlant(null)} />}
+      {modalPlant !== null && <PlantModal
+        plant={plants[modalPlant - 1]}
+        pid={modalPlant}
+        weeklyMap={weeklyMap}
+        rareGroup={rareGroup}
+        onClose={() => setModalPlant(null)}
+      />}
 
       <div className="hdr">
         <div className="hdr-top">
           <div>
             <div className="hdr-title">ğŸŒ¿ VÃ¤xtmanual</div>
-            <div className="hdr-sub">21 VÃ„XTER Â· SÃ–N / ONS / FRE</div>
+            <div className="hdr-sub">{plantCount} VÃ„XTER Â· SÃ–N / ONS / FRE</div>
             <div className="version-badge">{VERSION} Â· {CHANGELOG}</div>
           </div>
           {lastWateredLabel(history) && <div className="badge-today">{lastWateredLabel(history)}</div>}
@@ -254,6 +454,7 @@ export default function VÃ¤xtManual() {
         <div className="tabs">
           <button className={`tab-btn ${tab === "schema" ? "active" : ""}`} onClick={() => setTab("schema")}>Kommande</button>
           <button className={`tab-btn ${tab === "plants" ? "active" : ""}`} onClick={() => setTab("plants")}>Alla vÃ¤xter</button>
+          <button className={`tab-btn ${tab === "admin" ? "active" : ""}`} onClick={() => setTab("admin")}>Admin</button>
         </div>
       </div>
 
@@ -276,12 +477,13 @@ export default function VÃ¤xtManual() {
                   </div>
                 </div>
                 {ev.plants.map(pid => {
-                  const p = plantData[pid];
+                  const p = plants[pid - 1];
+                  if (!p) return null;
                   const done = isChecked(dateStr, pid);
                   return (
                     <div className="p-row" key={pid}>
                       <div className="thumb" onClick={(e) => { e.stopPropagation(); setModalPlant(pid); }}>
-                        <img src={plantImages[pid]} alt={`VÃ¤xt #${pid}`} width={48} height={48}
+                        <img src={`/plants/${p.image}`} alt={`VÃ¤xt #${pid}`} width={48} height={48}
                           style={{ opacity: done ? 0.4 : 1, filter: done ? "grayscale(80%)" : "none" }} />
                         <div className="thumb-badge" style={{ background: done ? "#C4B8A8" : p.color }}>{pid}</div>
                       </div>
@@ -296,30 +498,31 @@ export default function VÃ¤xtManual() {
               </div>
             );
           })
-        ) : (
+        ) : tab === "plants" ? (
           <>
             <p className="all-disclaimer">Arterna nedan Ã¤r fÃ¶rslag baserade pÃ¥ bilderna â€” bekrÃ¤fta gÃ¤rna!</p>
             {[
-              { label: "Bara sÃ¶ndag", ids: [2, 4, 6, 9, 10, 11, 19] },
-              { label: "SÃ¶ndag + onsdag", ids: [1, 3, 12, 16, 18] },
-              { label: "SÃ¶n + ons + fre", ids: [5, 7, 8, 13, 17, 21] },
-              { label: "Var 10â€“14 dag", ids: [14, 15, 20] },
-            ].map(group => (
+              { label: "Bara sÃ¶ndag", ids: plants.map((p, idx) => p.schedule.includes(0) && !p.schedule.includes(3) && !p.schedule.includes(5) ? idx + 1 : null).filter(Boolean) },
+              { label: "SÃ¶ndag + onsdag", ids: plants.map((p, idx) => p.schedule.includes(0) && p.schedule.includes(3) && !p.schedule.includes(5) ? idx + 1 : null).filter(Boolean) },
+              { label: "SÃ¶n + ons + fre", ids: plants.map((p, idx) => p.schedule.includes(0) && p.schedule.includes(3) && p.schedule.includes(5) ? idx + 1 : null).filter(Boolean) },
+              { label: "Var 10â€“14 dag", ids: plants.map((p, idx) => p.schedule.includes("rare") ? idx + 1 : null).filter(Boolean) },
+            ].map(group => group.ids.length > 0 && (
               <div key={group.label}>
                 <div className="sec-label">{group.label}</div>
                 <div className="all-card">
                   {group.ids.map(pid => {
-                    const p = plantData[pid];
+                    const p = plants[pid - 1];
+                    if (!p) return null;
                     return (
                       <div className="all-row" key={pid} onClick={() => setModalPlant(pid)}>
                         <div className="thumb">
-                          <img src={plantImages[pid]} alt={`VÃ¤xt #${pid}`} width={52} height={52} />
+                          <img src={`/plants/${p.image}`} alt={`VÃ¤xt #${pid}`} width={52} height={52} />
                           <div className="thumb-badge" style={{ background: p.color }}>{pid}</div>
                         </div>
                         <div className="all-row-right">
                           <div className="all-name">{p.rule}</div>
                           <div className="all-species">{p.id}</div>
-                          <div className="chips">{plantDays(pid).map(d => <span key={d} className="chip">{d}</span>)}</div>
+                          <div className="chips">{plantDays(pid, weeklyMap, rareGroup).map(d => <span key={d} className="chip">{d}</span>)}</div>
                         </div>
                       </div>
                     );
@@ -328,6 +531,8 @@ export default function VÃ¤xtManual() {
               </div>
             ))}
           </>
+        ) : (
+          <AdminTab plants={plants} onSave={handleAdminSave} onAddPlant={handleAddPlant} />
         )}
       </div>
     </div>

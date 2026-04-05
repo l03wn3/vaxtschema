@@ -1,0 +1,186 @@
+[
+  {
+    "id": "Begonia rex",
+    "rule": "Lätt fuktig jord",
+    "color": "#B85C38",
+    "wiki": "Begonia rex är en art i begoniasläktet, ursprungligen från nordöstra Indien. Den odlas främst för sina spektakulära, mönstrade blad som kan ha färger i silver, rosa, lila och grönt. Trivs i indirekt ljus och vill ha jämnt fuktig jord utan att stå blöt.",
+    "schedule": [0, 3],
+    "image": "plant_1.jpg"
+  },
+  {
+    "id": "Spindelplanta (Chlorophytum)",
+    "rule": "Låt torka ut",
+    "color": "#5A8A5E",
+    "wiki": "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Den är en av världens mest populära krukväxter tack vare sin härdighet och luftrenande egenskaper. Plantan bildar långa utlöpare med småplantor som hänger ned som spindlar.",
+    "schedule": [0],
+    "image": "plant_2.jpg"
+  },
+  {
+    "id": "Monstera / Philodendron",
+    "rule": "Stick fingret 3–5 cm — torr? Vattna",
+    "color": "#5A8A5E",
+    "wiki": "Monstera deliciosa, även kallad Adams revben efter bladens karaktäristiska hål och flikar, är en klätterväxt från Centralamerikas tropiska skogar. Den är en av de mest populära krukväxterna och kan bli mycket stor inomhus. Trivs i indirekt ljus och vill ha väldränerad jord som får torka upp något mellan vattningarna.",
+    "schedule": [0, 3, 5],
+    "image": "plant_3.jpg"
+  },
+  {
+    "id": "Hyacint / Tulpan (lök)",
+    "rule": "Lite vatten, sällan",
+    "color": "#8A6AAB",
+    "wiki": "Hyacint är en flerårig blommande lökväxt med ursprung i sydöstra Turkiet och Levantens medelhavskust. Den kom troligen till Sverige under 1600-talet och är mest känd för sina flockar av doftande, färgglada blommor i blått, vitt, rosa, rött eller lila. Blommar på våren och behöver lite vatten under viloperiodens.",
+    "schedule": [0],
+    "image": "plant_4.jpg"
+  },
+  {
+    "id": "Begonia / Caladium",
+    "rule": "Håll jämnt fuktig",
+    "color": "#B85C38",
+    "wiki": "Begoniasläktet (Begonia) är ett av de tio artrikaste släktena bland gömfröväxter med ungefär 1 800 arter. De flesta kommer från tropiska och subtropiska områden. Odlas som krukväxter för sina dekorativa blad eller vackra blommor och trivs i jämnt fuktig, väldränerad jord.",
+    "schedule": [0, 3, 5],
+    "image": "plant_5.jpg"
+  },
+  {
+    "id": "Tropisk buske (Kroton)",
+    "rule": "Lite vatten, låt nästan torka",
+    "color": "#5A8A5E",
+    "wiki": "Kroton (Codiaeum variegatum) är en törelväxt som först beskrevs av Carl von Linné. Namnet kommer från malajiska 'kodiho' och latin 'variegatum' (brokig). Känd för sina intensivt färgade blad i gult, orange, rött och grönt. Trivs i starkt ljus och vill torka upp något mellan vattningarna.",
+    "schedule": [0],
+    "image": "plant_6.jpg"
+  },
+  {
+    "id": "Vattenväxt / stickling i glas",
+    "rule": "Alltid fuktig",
+    "color": "#3A7A9A",
+    "wiki": "En stickling är en avskuren stam-, gren- eller rotdel av en växt som sätts i vatten eller jord för att slå rot och bilda en ny planta. Sticklingar i vatten bör skyddas från direkt ljus på rotdelen. Många tropiska krukväxter som pothos och monstera rotar sig lätt i vatten.",
+    "schedule": [0, 3, 5],
+    "image": "plant_7.jpg"
+  },
+  {
+    "id": "Pothos / Epipremnum",
+    "rule": "Torkar snabbt — kolla ofta",
+    "color": "#5A8A5E",
+    "wiki": "Gullranka (Epipremnum aureum) är en art i familjen kallaväxter som förekommer naturligt på Sällskapsöarna. I Sverige är den en mycket vanlig och populär krukväxt. Den är lättskött och tålig, med hjärtformade blad som ofta har gula eller vita mönster. Klättrar eller hänger och renar luften.",
+    "schedule": [0, 3, 5],
+    "image": "plant_8.jpg"
+  },
+  {
+    "id": "Lökväxt (hyacint?)",
+    "rule": "Lite vatten, sällan",
+    "color": "#8A6AAB",
+    "wiki": "Hyacint är en flerårig blommande lökväxt med ursprung i sydöstra Turkiet. Blomfärgen kan vara blå, vit, ljusgul, rosa, röd eller lila. Under viloperioden behöver löken torrt och svalt. Vattna sparsamt — lökar ruttnar lätt av för mycket fukt.",
+    "schedule": [0],
+    "image": "plant_9.jpg"
+  },
+  {
+    "id": "Lökväxt",
+    "rule": "Lite vatten, sällan",
+    "color": "#8A6AAB",
+    "wiki": "Lökväxter lagrar energi i en underjordisk lök och har ofta en tydlig viloperiod. Under aktiv tillväxt och blomning behöver de måttligt med vatten, men under vila ska jorden vara nästan torr. Vanliga lökväxter inomhus inkluderar hyacint, amaryllis och tulpan.",
+    "schedule": [0],
+    "image": "plant_10.jpg"
+  },
+  {
+    "id": "Spindelplanta / Gräsväxt",
+    "rule": "Lätt fuktig jord",
+    "color": "#5A8A5E",
+    "wiki": "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Den är extremt tålig och anpassningsbar, och klarar både torka och övervattning bättre än de flesta krukväxter. Perfekt för nybörjare och känd för att rena luften.",
+    "schedule": [0],
+    "image": "plant_11.jpg"
+  },
+  {
+    "id": "Hängande tropisk",
+    "rule": "Känn på jorden — vattna vid behov",
+    "color": "#5A8A5E",
+    "wiki": "Tremastarblomssläktet (Tradescantia), även kallade båtblommor, är ett växtsläkte i familjen himmelsblommeväxter. Flera arter odlas som krukväxter för sina dekorativa, ofta randiga blad i grönt, lila och silver. De växer snabbt som hängväxter och är lätta att föröka med sticklingar.",
+    "schedule": [0, 3],
+    "image": "plant_12.jpg"
+  },
+  {
+    "id": "Ormbunke (Nephrolepis)",
+    "rule": "Aldrig torr — vattna frikostigt",
+    "color": "#3A7A9A",
+    "wiki": "Nephrolepis (svärdsbräken) är ett släkte av bräkenväxter. Den vanligaste arten i odling är Nephrolepis exaltata, känd som Bostonbräken. Den trivs i hög luftfuktighet och jämnt fuktig jord — låt den aldrig torka ut helt. Perfekt för badrum eller kök.",
+    "schedule": [0, 3, 5],
+    "image": "plant_13.jpg"
+  },
+  {
+    "id": "Epiphyllum / Ökenväxt",
+    "rule": "Låt torka helt ut",
+    "color": "#9A7A1A",
+    "wiki": "Bladkaktussläktet (Epiphyllum) omfattar 15–20 arter inom familjen kaktusväxter, ursprungligen från Centralamerika och Mexiko. Till skillnad från ökenkaktus är de flesta epifyter som växer på träd i tropisk regnskog. De har platta, bladlika stammar och behöver torka ut ordentligt mellan vattningarna.",
+    "schedule": ["rare"],
+    "image": "plant_14.jpg"
+  },
+  {
+    "id": "Monstera",
+    "rule": "Låt översta lagret torka",
+    "color": "#5A8A5E",
+    "wiki": "Monstera deliciosa, även kallad Adams revben, är den vanligaste arten i monsterasläktet. De karaktäristiska hålen i bladen utvecklas när plantan mognar. Ursprungligen en klätterväxt från Centralamerikas regnskogar. Låt översta jordlagret torka mellan vattningarna — den ska inte torka ut helt.",
+    "schedule": ["rare"],
+    "image": "plant_15.jpg"
+  },
+  {
+    "id": "Caladium / Coleus",
+    "rule": "Torkar snabbt — kolla ofta",
+    "color": "#B85C38",
+    "wiki": "Palettblad (Coleus/Plectranthus scutellarioides) är en flerårig ört med flerfärgade blad, ursprungligen från Sydostasien. Plantan blir 30–80 cm hög och blommar juni–oktober. Känd för sina spektakulära blad i kombinationer av grönt, rött, rosa, gult och lila. Torkar snabbt och vill ha jämnt fuktig jord.",
+    "schedule": [0, 3],
+    "image": "plant_16.jpg"
+  },
+  {
+    "id": "Colocasia / Alocasia",
+    "rule": "Fuktig jord + duscha bladen",
+    "color": "#3A7A9A",
+    "wiki": "Alokasiasläktet (Alocasia) omfattar cirka 70 arter i familjen kallaväxter, främst från sydöstra Asien. De har stora, dekorativa blad och kallas ibland \"elefantöron\". Trivs i hög luftfuktighet och jämnt fuktig jord. Duscha gärna bladen regelbundet för att hålla dem friska.",
+    "schedule": [0, 3, 5],
+    "image": "plant_17.jpg"
+  },
+  {
+    "id": "Oxalis / Begonia (röd)",
+    "rule": "Vattna när den börjar hänga",
+    "color": "#8A3A3A",
+    "wiki": "Harsyra (Oxalis) är ett släkte i familjen harsyreväxter. Bladen är ätbara med en syrlig smak som kommer av oxalsyra. Många arter odlas som krukväxter för sina dekorativa, trefingrade blad som fälls ihop på natten. Signalerar tydligt när den behöver vatten genom att bladen hänger.",
+    "schedule": [0, 3],
+    "image": "plant_18.jpg"
+  },
+  {
+    "id": "Gräshängare (Carex/Chlor.)",
+    "rule": "Låt torka ut",
+    "color": "#5A8A5E",
+    "wiki": "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Som hängväxt bildar den eleganta utlöpare med småplantor. Extremt tålig och klarar perioder av torka bra, men trivs bäst med regelbunden vattning där jorden får torka ut emellan.",
+    "schedule": [0],
+    "image": "plant_19.jpg"
+  },
+  {
+    "id": "Monstera / Alocasia (stor)",
+    "rule": "Sällan, men vattna ordentligt",
+    "color": "#9A7A1A",
+    "wiki": "Monstera deliciosa kan bli mycket stor inomhus med blad som når över en meter i diameter. Som regnväxt vill den ha ordentligt med vatten när den vattnas, men tål att jorden torkar ut en del mellan vattningarna. Ge den en stöttpinne eller mosstotem att klättra på för bästa tillväxt.",
+    "schedule": ["rare"],
+    "image": "plant_20.jpg"
+  },
+  {
+    "id": "Fredslilja (Spathiphyllum)",
+    "rule": "Känn på jorden — vattna vid behov",
+    "color": "#3A7A9A",
+    "wiki": "Fredslilja (Spathiphyllum) är en populär krukväxt i familjen kallaväxter, ursprungligen från tropiska Amerika och sydöstra Asien. Känd för sina eleganta vita blommor och mörkgröna, blanka blad. En av de bästa luftrenande växterna enligt NASA. Signalerar tydligt när den behöver vatten genom att bladen sjunker.",
+    "schedule": [0, 3, 5],
+    "image": "plant_21.jpg"
+  },
+  {
+    "id": "Murgröna (Hedera helix)",
+    "rule": "Låt torka ut mellan vattningar",
+    "color": "#5A8A5E",
+    "wiki": "Murgröna (Hedera helix) är en klätterväxt i familjen araliaväxter. Den är en av få europeiska lianer och kan bli mycket gammal. Som krukväxt är den populär för sina dekorativa, flikiga blad. Trivs i sval, ljus miljö och vill torka ut något mellan vattningarna.",
+    "schedule": [0, 3],
+    "image": "plant_22.jpg"
+  },
+  {
+    "id": "Echeveria",
+    "rule": "Mycket sällan, låt torka helt",
+    "color": "#9A7A1A",
+    "wiki": "Echeveria är ett släkte suckulenter i familjen fetbladsväxter, ursprungligen från Mexiko och Centralamerika. De bildar eleganta rosetter av köttiga blad i grönt, blått, rosa eller lila. Behöver mycket ljus och väldigt lite vatten — låt jorden torka ut helt mellan vattningarna.",
+    "schedule": ["rare"],
+    "image": "plant_23.jpg"
+  }
+]
