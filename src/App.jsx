@@ -237,7 +237,7 @@ function AdminTab({ plants, onUpdate }) {
           renderItem={(p, idx, onDragHandle) => (
             <div className="admin-plant-row">
               <div className="drag-handle" onPointerDown={onDragHandle} style={{ touchAction: "none", cursor: "grab", padding: "8px 4px", fontSize: 18, color: "#B0A898", userSelect: "none" }}>☰</div>
-              <img src={`/plants/${p.image}`} alt={p.id} className="admin-thumb" />
+              <img src={`/plants/hires/${p.image}`} alt={p.id} className="admin-thumb" />
               <div className="admin-plant-info">
                 <div className="admin-plant-name">{p.id}</div>
                 <div className="admin-plant-number">#{idx + 1}</div>
@@ -435,7 +435,7 @@ export default function Växtmanual() {
         .admin-title { font-size: 15px; font-weight: 600; color: #1E3A0E; margin-bottom: 14px; }
         .admin-plant-row { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-bottom: 1px solid #F0EBE0; }
         .admin-plant-row:last-child { border-bottom: none; }
-        .admin-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+        .admin-thumb { width: 64px; height: 64px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
         .admin-plant-info { flex: 1; min-width: 0; }
         .admin-plant-name { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .admin-plant-number { font-size: 11px; color: #9A8878; margin-top: 2px; }
