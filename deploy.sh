@@ -5,6 +5,7 @@ echo "Pulling latest..."
 git pull
 echo "Installing dependencies..."
 npm install --no-optional
+npm install @rollup/rollup-linux-x64-gnu 2>/dev/null || true
 echo "Building..."
 npx vite build
 echo "Reloading nginx..."
