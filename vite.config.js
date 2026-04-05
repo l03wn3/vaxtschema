@@ -5,9 +5,13 @@ import { readFileSync } from 'fs'
 const pkg = JSON.parse(readFileSync('./package.json', 'utf8'))
 const buildDate = new Date().toISOString().split('T')[0]
 
+// Update this string when making notable changes
+const changelog = "Delat state mellan enheter, dynamiskt datum"
+
 export default defineConfig({
   plugins: [react()],
   define: {
     __APP_VERSION__: JSON.stringify(`v${pkg.version} – ${buildDate}`),
+    __APP_CHANGELOG__: JSON.stringify(changelog),
   },
 })

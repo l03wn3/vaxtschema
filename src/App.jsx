@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 const VERSION = __APP_VERSION__;
+const CHANGELOG = __APP_CHANGELOG__;
 
 // Images live in /public/plants/
 const plantImages = Object.fromEntries(
@@ -178,7 +179,7 @@ export default function VäxtManual() {
           <div>
             <div className="hdr-title">🌿 Växtmanual</div>
             <div className="hdr-sub">21 VÄXTER · MÅN / ONS / SÖN</div>
-            <div className="version-badge">{VERSION}</div>
+            <div className="version-badge">{VERSION} · {CHANGELOG}</div>
           </div>
           {lastWateredLabel(history) && <div className="badge-today">{lastWateredLabel(history)}</div>}
         </div>
@@ -189,7 +190,7 @@ export default function VäxtManual() {
       </div>
 
       {tab === "schema" && (
-        <div className="notice">📅 <strong>Schema: Måndag + Onsdag + Söndag.</strong> Bockningar sparas i 7 dagar.</div>
+        <div className="notice">📅 <strong>Schema: Måndag + Onsdag + Söndag.</strong></div>
       )}
 
       <div className="content">
