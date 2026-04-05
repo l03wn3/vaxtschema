@@ -97,6 +97,13 @@ function plantDays(pid) {
   return d;
 }
 
+function lastWateredLabel(history) {
+  const dates = Object.keys(history).filter(d => history[d]?.length > 0).sort();
+  if (!dates.length) return null;
+  const last = new Date(dates[dates.length - 1] + "T12:00:00");
+  return `💧 Vattnade ${last.getDate()} ${MON[last.getMonth()]}`;
+}
+
 export default function VäxtManual() {
   const [tab, setTab] = useState("schema");
   const [history, setHistory] = useState({});
@@ -173,7 +180,7 @@ export default function VäxtManual() {
             <div className="hdr-sub">21 VÄXTER · MÅN / ONS / SÖN</div>
             <div className="version-badge">{VERSION}</div>
           </div>
-          <div className="badge-today">💧 Vattnade 2 apr</div>
+          {lastWateredLabel(history) && <div className="badge-today">{lastWateredLabel(history)}</div>}
         </div>
         <div className="tabs">
           <button className={`tab-btn ${tab === "schema" ? "active" : ""}`} onClick={() => setTab("schema")}>Kommande</button>
