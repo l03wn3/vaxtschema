@@ -1,96 +1,59 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const VERSION = __APP_VERSION__;
 const CHANGELOG = __APP_CHANGELOG__;
-
 const SW = ["SÃ¶ndag","MÃ¥ndag","Tisdag","Onsdag","Torsdag","Fredag","LÃ¶rdag"];
 const MON = ["jan","feb","mar","apr","maj","jun","jul","aug","sep","okt","nov","dec"];
 const TODAY = new Date();
-const STORAGE_KEY = "vaxtmanual_history";
 const RETENTION_DAYS = 7;
+const DEFAULT_ROOMS = ["Vardagsrum", "KÃ¶k", "Sovrum", "Balkong"];
 
 async function loadPlants() {
-  try {
-    const res = await fetch("/api/plants");
-    return res.ok ? await res.json() : [];
-  } catch { return []; }
+  try { const r = await fetch("/api/plants"); return r.ok ? await r.json() : []; } catch { return []; }
 }
-
 async function loadHistoryFromServer() {
-  try {
-    const res = await fetch("/api/history");
-    return res.ok ? await res.json() : {};
-  } catch { return {}; }
+  try { const r = await fetch("/api/history"); return r.ok ? await r.json() : {}; } catch { return {}; }
 }
-
 function saveHistoryToServer(h) {
-  fetch("/api/history", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(h),
-  }).catch(() => {});
+  fetch("/api/history", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(h) }).catch(() => {});
 }
-
 async function savePlantsToServer(plants) {
-  try {
-    await fetch("/api/plants", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plants }),
-    });
-  } catch (err) {
-    console.error("Failed to save plants:", err);
-  }
+  try { await fetch("/api/plants", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plants }) }); }
+  catch (err) { console.error("Failed to save plants:", err); }
 }
-
 function purgeOld(h) {
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - RETENTION_DAYS);
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - RETENTION_DAYS);
   const cutoffStr = cutoff.toISOString().split("T")[0];
   const cleaned = { ...h };
   Object.keys(cleaned).forEach(d => { if (d < cutoffStr) delete cleaned[d]; });
   return cleaned;
 }
-
 function fmtDate(d) {
   return `${["SÃ¶n","MÃ¥n","Tis","Ons","Tor","Fre","LÃ¶r"][d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
 }
 
-// Helper to derive weeklyMap and rareGroup from plants
 function deriveScheduleMaps(plants) {
   const weeklyMap = { 0: [], 3: [], 5: [] };
   const rareGroup = [];
-
   plants.forEach((p, idx) => {
-    const pid = idx + 1; // 1-based plant ID
+    const pid = idx + 1;
     if (!Array.isArray(p.schedule)) return;
-
-    if (p.schedule.includes("rare")) {
-      rareGroup.push(pid);
-    } else {
-      p.schedule.forEach(day => {
-        if (day in weeklyMap && !weeklyMap[day].includes(pid)) {
-          weeklyMap[day].push(pid);
-        }
-      });
-    }
+    if (p.schedule.includes("rare")) { rareGroup.push(pid); }
+    else { p.schedule.forEach(day => { if (day in weeklyMap && !weeklyMap[day].includes(pid)) weeklyMap[day].push(pid); }); }
   });
-
   return { weeklyMap, rareGroup };
 }
 
 function generateUpcoming(plants, weeklyMap, rareGroup) {
   const events = [];
   for (let d = 0; d <= 14; d++) {
-    const date = new Date(TODAY);
-    date.setDate(TODAY.getDate() + d);
+    const date = new Date(TODAY); date.setDate(TODAY.getDate() + d);
     const dow = date.getDay();
     if (!weeklyMap[dow]) continue;
     events.push({ date, dayName: SW[dow], plants: weeklyMap[dow] });
   }
-  const rareDate = new Date(TODAY);
-  rareDate.setDate(TODAY.getDate() + 12);
   if (rareGroup.length > 0) {
+    const rareDate = new Date(TODAY); rareDate.setDate(TODAY.getDate() + 12);
     events.push({ date: rareDate, dayName: "Var 10â€“14 dag", plants: rareGroup, isRare: true });
   }
   events.sort((a, b) => a.date - b.date);
@@ -123,13 +86,11 @@ function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose }) {
         <div className="modal-badge" style={{ background: plant.color }}>#{pid}</div>
         <div className="modal-body">
           <h2 className="modal-title">{plant.id}</h2>
-          <div className="modal-rule">
-            <span className="modal-rule-icon">ğŸ’§</span>
-            {plant.rule}
-          </div>
+          <div className="modal-rule"><span className="modal-rule-icon">ğŸ’§</span>{plant.rule}</div>
           <div className="modal-schedule">
             {plantDays(pid, weeklyMap, rareGroup).map(d => <span key={d} className="chip">{d}</span>)}
           </div>
+          {plant.room && <div style={{ fontSize: 13, color: "#9A8878", marginBottom: 8 }}>ğŸ“ {plant.room}</div>}
           <p className="modal-wiki">{plant.wiki}</p>
         </div>
       </div>
@@ -137,37 +98,107 @@ function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose }) {
   );
 }
 
-function AdminTab({ plants, onSave, onAddPlant }) {
-  const [reordered, setReordered] = useState(plants);
+/* â”€â”€ Drag-and-drop reorderable list â”€â”€ */
+function DraggableList({ items, onReorder, renderItem, keyFn }) {
+  const [dragIdx, setDragIdx] = useState(null);
+  const [overIdx, setOverIdx] = useState(null);
+  const itemRefs = useRef([]);
+  const dragStartY = useRef(0);
+
+  const getTargetIdx = useCallback((clientY) => {
+    for (let i = 0; i < itemRefs.current.length; i++) {
+      const el = itemRefs.current[i];
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (clientY < rect.top + rect.height / 2) return i;
+    }
+    return items.length - 1;
+  }, [items.length]);
+
+  const handlePointerDown = (e, idx) => {
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setDragIdx(idx);
+    setOverIdx(idx);
+    dragStartY.current = e.clientY;
+  };
+
+  const handlePointerMove = (e) => {
+    if (dragIdx === null) return;
+    setOverIdx(getTargetIdx(e.clientY));
+  };
+
+  const handlePointerUp = () => {
+    if (dragIdx === null || overIdx === null) return;
+    if (dragIdx !== overIdx) {
+      const arr = [...items];
+      const [moved] = arr.splice(dragIdx, 1);
+      arr.splice(overIdx, 0, moved);
+      onReorder(arr);
+    }
+    setDragIdx(null);
+    setOverIdx(null);
+  };
+
+  const displayOrder = () => {
+    if (dragIdx === null || overIdx === null) return items.map((_, i) => i);
+    const order = items.map((_, i) => i);
+    const [moved] = order.splice(dragIdx, 1);
+    order.splice(overIdx, 0, moved);
+    return order;
+  };
+
+  const order = displayOrder();
+
+  return (
+    <div onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={() => { setDragIdx(null); setOverIdx(null); }}>
+      {order.map((itemIdx, visualPos) => (
+        <div
+          key={keyFn ? keyFn(items[itemIdx], itemIdx) : itemIdx}
+          ref={el => itemRefs.current[visualPos] = el}
+          style={{
+            opacity: dragIdx === itemIdx ? 0.85 : 1,
+            background: dragIdx === itemIdx ? "#EDE8DF" : "transparent",
+            borderRadius: 10,
+            transition: dragIdx !== null ? "none" : "transform 0.2s",
+          }}
+        >
+          {renderItem(items[itemIdx], itemIdx, (e) => handlePointerDown(e, itemIdx))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* â”€â”€ Admin Tab â”€â”€ */
+function AdminTab({ plants, onUpdate }) {
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    id: "",
-    rule: "",
-    color: "#5A8A5E",
-    wiki: "",
-    schedule: [0],
-  });
+  const [formData, setFormData] = useState({ id: "", rule: "", color: "#5A8A5E", wiki: "", schedule: [0], room: DEFAULT_ROOMS[0] });
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [editingRoom, setEditingRoom] = useState(null); // idx of plant being room-edited
+  const [newRoom, setNewRoom] = useState("");
+  const [showNewRoom, setShowNewRoom] = useState(false);
 
   const colors = [...new Set(plants.map(p => p.color))];
+  const allRooms = [...new Set([...DEFAULT_ROOMS, ...plants.map(p => p.room).filter(Boolean)])];
 
-  const moveUp = (idx) => {
-    if (idx === 0) return;
-    const arr = [...reordered];
-    [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
-    setReordered(arr);
+  const handleReorder = (newOrder) => {
+    onUpdate(newOrder);
   };
 
-  const moveDown = (idx) => {
-    if (idx === reordered.length - 1) return;
-    const arr = [...reordered];
-    [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
-    setReordered(arr);
+  const handleRoomChange = (idx, room) => {
+    const updated = [...plants];
+    updated[idx] = { ...updated[idx], room };
+    onUpdate(updated);
+    setEditingRoom(null);
   };
 
-  const handleSave = () => {
-    onSave(reordered);
+  const handleAddRoom = () => {
+    if (newRoom.trim()) {
+      setShowNewRoom(false);
+      // Room gets added when assigned to a plant
+    }
   };
 
   const handleAddPlant = async () => {
@@ -175,39 +206,20 @@ function AdminTab({ plants, onSave, onAddPlant }) {
       alert("Fyll i alla fÃ¤lt och vÃ¤lj en bild");
       return;
     }
-
     setUploading(true);
-    const uploadFormData = new FormData();
-    uploadFormData.append("image", selectedFile);
-
+    const fd = new FormData();
+    fd.append("image", selectedFile);
     try {
-      const res = await fetch("/api/plants/upload", {
-        method: "POST",
-        body: uploadFormData,
-      });
+      const res = await fetch("/api/plants/upload", { method: "POST", body: fd });
       const { filename } = await res.json();
-
-      const newPlant = {
-        ...formData,
-        image: filename,
-      };
-
-      const updatedPlants = [...reordered, newPlant];
-      setReordered(updatedPlants);
-      onAddPlant(updatedPlants);
-
-      setFormData({
-        id: "",
-        rule: "",
-        color: "#5A8A5E",
-        wiki: "",
-        schedule: [0],
-      });
+      const updated = [...plants, { ...formData, image: filename }];
+      onUpdate(updated);
+      setFormData({ id: "", rule: "", color: "#5A8A5E", wiki: "", schedule: [0], room: allRooms[0] || "Vardagsrum" });
       setSelectedFile(null);
       setShowForm(false);
     } catch (err) {
       console.error("Upload failed:", err);
-      alert("Laddningen misslyckades");
+      alert("Uppladdningen misslyckades");
     } finally {
       setUploading(false);
     }
@@ -216,23 +228,57 @@ function AdminTab({ plants, onSave, onAddPlant }) {
   return (
     <div className="admin-container">
       <div className="admin-section">
-        <h3 className="admin-title">VÃ¤xtsamling ({reordered.length})</h3>
-        <div className="plant-list">
-          {reordered.map((p, idx) => (
-            <div key={idx} className="admin-plant-row">
+        <h3 className="admin-title">VÃ¤xtsamling ({plants.length})</h3>
+        <p style={{ fontSize: 12, color: "#9A8878", marginBottom: 12 }}>HÃ¥ll â˜° och dra fÃ¶r att Ã¤ndra ordning. Tryck rum fÃ¶r att flytta.</p>
+        <DraggableList
+          items={plants}
+          onReorder={handleReorder}
+          keyFn={(p) => p.id + p.image}
+          renderItem={(p, idx, onDragHandle) => (
+            <div className="admin-plant-row">
+              <div className="drag-handle" onPointerDown={onDragHandle} style={{ touchAction: "none", cursor: "grab", padding: "8px 4px", fontSize: 18, color: "#B0A898", userSelect: "none" }}>â˜°</div>
               <img src={`/plants/${p.image}`} alt={p.id} className="admin-thumb" />
               <div className="admin-plant-info">
                 <div className="admin-plant-name">{p.id}</div>
                 <div className="admin-plant-number">#{idx + 1}</div>
               </div>
-              <div className="admin-buttons">
-                <button onClick={() => moveUp(idx)} className="admin-btn" disabled={idx === 0}>â¬†</button>
-                <button onClick={() => moveDown(idx)} className="admin-btn" disabled={idx === reordered.length - 1}>â¬‡</button>
-              </div>
+              {editingRoom === idx ? (
+                <select
+                  autoFocus
+                  value={p.room || ""}
+                  onChange={(e) => handleRoomChange(idx, e.target.value)}
+                  onBlur={() => setEditingRoom(null)}
+                  className="room-select"
+                >
+                  {allRooms.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+              ) : (
+                <button className="room-badge" onClick={() => setEditingRoom(idx)}>
+                  {p.room || "â€”"}
+                </button>
+              )}
             </div>
-          ))}
+          )}
+        />
+      </div>
+
+      <div className="admin-section">
+        <h3 className="admin-title">Rum</h3>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+          {allRooms.map(r => {
+            const count = plants.filter(p => p.room === r).length;
+            return <span key={r} className="chip">{r} ({count})</span>;
+          })}
         </div>
-        <button onClick={handleSave} className="admin-save-btn">Spara ordning</button>
+        {showNewRoom ? (
+          <div style={{ display: "flex", gap: 8 }}>
+            <input type="text" placeholder="Nytt rum" value={newRoom} onChange={e => setNewRoom(e.target.value)}
+              className="form-input" style={{ flex: 1 }} onKeyDown={e => e.key === "Enter" && handleAddRoom()} />
+            <button onClick={handleAddRoom} className="form-submit" style={{ flex: 0, padding: "8px 16px" }}>+</button>
+          </div>
+        ) : (
+          <button onClick={() => setShowNewRoom(true)} className="admin-add-btn" style={{ fontSize: 13, padding: 10 }}>+ Nytt rum</button>
+        )}
       </div>
 
       <div className="admin-section">
@@ -241,42 +287,19 @@ function AdminTab({ plants, onSave, onAddPlant }) {
           <button onClick={() => setShowForm(true)} className="admin-add-btn">+ LÃ¤gg till ny vÃ¤xt</button>
         ) : (
           <div className="admin-form">
-            <input
-              type="text"
-              placeholder="VÃ¤xtens namn"
-              value={formData.id}
-              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-              className="form-input"
-            />
-            <input
-              type="text"
-              placeholder="Vattningsregel"
-              value={formData.rule}
-              onChange={(e) => setFormData({ ...formData, rule: e.target.value })}
-              className="form-input"
-            />
-            <select
-              value={formData.color}
-              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-              className="form-input"
-            >
-              {colors.map(c => (
-                <option key={c} value={c}>{c}</option>
-              ))}
+            <input type="text" placeholder="VÃ¤xtens namn" value={formData.id}
+              onChange={e => setFormData({ ...formData, id: e.target.value })} className="form-input" />
+            <input type="text" placeholder="Vattningsregel" value={formData.rule}
+              onChange={e => setFormData({ ...formData, rule: e.target.value })} className="form-input" />
+            <select value={formData.room} onChange={e => setFormData({ ...formData, room: e.target.value })} className="form-input">
+              {allRooms.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
-            <textarea
-              placeholder="VÃ¤xtbeskrivning (wiki)"
-              value={formData.wiki}
-              onChange={(e) => setFormData({ ...formData, wiki: e.target.value })}
-              className="form-input"
-              rows="4"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-              className="form-input"
-            />
+            <select value={formData.color} onChange={e => setFormData({ ...formData, color: e.target.value })} className="form-input">
+              {colors.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <textarea placeholder="VÃ¤xtbeskrivning (wiki)" value={formData.wiki}
+              onChange={e => setFormData({ ...formData, wiki: e.target.value })} className="form-input" rows="3" />
+            <input type="file" accept="image/*" onChange={e => setSelectedFile(e.target.files?.[0] || null)} className="form-input" />
             <div className="form-buttons">
               <button onClick={handleAddPlant} disabled={uploading} className="form-submit">
                 {uploading ? "Laddar upp..." : "LÃ¤gg till"}
@@ -290,7 +313,8 @@ function AdminTab({ plants, onSave, onAddPlant }) {
   );
 }
 
-export default function VÃ¤xtManual() {
+/* â”€â”€ Main App â”€â”€ */
+export default function VÃ¤xtmanual() {
   const [tab, setTab] = useState("schema");
   const [plants, setPlants] = useState([]);
   const [history, setHistory] = useState({});
@@ -299,21 +323,19 @@ export default function VÃ¤xtManual() {
   const [weeklyMap, setWeeklyMap] = useState({});
   const [rareGroup, setRareGroup] = useState([]);
 
-  // Load plants and history on mount
   useEffect(() => {
     Promise.all([loadPlants(), loadHistoryFromServer()]).then(([p, h]) => {
       setPlants(p);
       if (p.length > 0) {
-        const { weeklyMap, rareGroup } = deriveScheduleMaps(p);
-        setWeeklyMap(weeklyMap);
-        setRareGroup(rareGroup);
+        const maps = deriveScheduleMaps(p);
+        setWeeklyMap(maps.weeklyMap);
+        setRareGroup(maps.rareGroup);
       }
       setHistory(purgeOld(h));
       setLoaded(true);
     });
   }, []);
 
-  // Save history when it changes
   useEffect(() => { if (loaded) saveHistoryToServer(history); }, [history, loaded]);
 
   const toggle = (dateStr, pid) => {
@@ -322,31 +344,28 @@ export default function VÃ¤xtManual() {
       if (!next[dateStr]) next[dateStr] = [];
       const arr = [...next[dateStr]];
       const idx = arr.indexOf(pid);
-      if (idx > -1) arr.splice(idx, 1);
-      else arr.push(pid);
+      if (idx > -1) arr.splice(idx, 1); else arr.push(pid);
       return { ...next, [dateStr]: arr };
     });
   };
-
   const isChecked = (dateStr, pid) => (history[dateStr] || []).includes(pid);
   const upcoming = generateUpcoming(plants, weeklyMap, rareGroup);
-  const plantCount = plants.length;
 
-  const handleAdminSave = (reorderedPlants) => {
-    setPlants(reorderedPlants);
-    savePlantsToServer(reorderedPlants);
-    const { weeklyMap, rareGroup } = deriveScheduleMaps(reorderedPlants);
-    setWeeklyMap(weeklyMap);
-    setRareGroup(rareGroup);
-  };
-
-  const handleAddPlant = (updatedPlants) => {
+  const handlePlantsUpdate = (updatedPlants) => {
     setPlants(updatedPlants);
     savePlantsToServer(updatedPlants);
-    const { weeklyMap, rareGroup } = deriveScheduleMaps(updatedPlants);
-    setWeeklyMap(weeklyMap);
-    setRareGroup(rareGroup);
+    const maps = deriveScheduleMaps(updatedPlants);
+    setWeeklyMap(maps.weeklyMap);
+    setRareGroup(maps.rareGroup);
   };
+
+  // Group plants by room for gallery
+  const plantsByRoom = plants.reduce((acc, p, idx) => {
+    const room = p.room || "Ã–vrigt";
+    if (!acc[room]) acc[room] = [];
+    acc[room].push({ ...p, pid: idx + 1 });
+    return acc;
+  }, {});
 
   if (!loaded) {
     return <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#F5F0E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>Laddar...</div>;
@@ -380,21 +399,24 @@ export default function VÃ¤xtManual() {
         .p-species { font-size: 12px; color: #9A8878; font-weight: 300; }
         .p-rule { font-size: 14px; font-weight: 500; margin-top: 1px; }
         .p-check { font-size: 18px; flex-shrink: 0; }
-        .all-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 14px; }
-        .all-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EBE0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .all-row:last-child { border-bottom: none; }
-        .all-row:active { background: #F5F0E8; }
-        .chips { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
-        .chip { background: #EEE9DF; color: #6B5538; padding: 2px 7px; border-radius: 8px; font-size: 11px; font-weight: 500; }
-        .all-row-right { flex: 1; }
-        .all-name { font-size: 14px; font-weight: 500; }
-        .all-species { font-size: 12px; color: #9A8878; font-weight: 300; margin-top: 1px; }
-        .all-disclaimer { font-size: 11.5px; color: #9A8878; margin: 0 0 12px; font-style: italic; line-height: 1.4; }
-        .sec-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #9A8878; margin: 18px 0 8px; }
         .thumb { position: relative; flex-shrink: 0; }
         .thumb img { display: block; border-radius: 10px; object-fit: cover; }
         .thumb-badge { position: absolute; bottom: 0; right: 0; color: white; border-radius: 6px 0 10px 0; font-size: 10px; font-weight: 700; padding: 1px 4px; line-height: 1.4; }
+        .chips { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+        .chip { background: #EEE9DF; color: #6B5538; padding: 2px 7px; border-radius: 8px; font-size: 11px; font-weight: 500; }
 
+        /* Gallery (Alla vÃ¤xter) */
+        .room-section { margin-bottom: 20px; }
+        .room-hdr { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #9A8878; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .gallery-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .gallery-card:active { opacity: 0.85; }
+        .gallery-img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+        .gallery-info { padding: 8px; }
+        .gallery-name { font-size: 12px; font-weight: 500; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .gallery-rule { font-size: 10px; color: #9A8878; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* Modal */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease; }
         .modal-content { background: #F5F0E8; border-radius: 20px 20px 0 0; max-height: 85vh; width: 100%; max-width: 500px; overflow-y: auto; -webkit-overflow-scrolling: touch; position: relative; animation: slideUp 0.3s ease; }
         .modal-close { position: absolute; top: 12px; right: 14px; background: rgba(0,0,0,0.4); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; }
@@ -407,29 +429,25 @@ export default function VÃ¤xtManual() {
         .modal-schedule { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
         .modal-wiki { font-size: 14px; line-height: 1.6; color: #4A4030; }
 
-        .admin-container { padding: 14px; }
+        /* Admin */
+        .admin-container { padding: 0; }
         .admin-section { background: white; border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
         .admin-title { font-size: 15px; font-weight: 600; color: #1E3A0E; margin-bottom: 14px; }
-        .plant-list { margin-bottom: 14px; }
-        .admin-plant-row { display: flex; align-items: center; gap: 12px; padding: 12px; background: #F9F6F0; border-radius: 10px; margin-bottom: 10px; }
-        .admin-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; }
-        .admin-plant-info { flex: 1; }
-        .admin-plant-name { font-size: 13px; font-weight: 500; }
+        .admin-plant-row { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-bottom: 1px solid #F0EBE0; }
+        .admin-plant-row:last-child { border-bottom: none; }
+        .admin-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+        .admin-plant-info { flex: 1; min-width: 0; }
+        .admin-plant-name { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .admin-plant-number { font-size: 11px; color: #9A8878; margin-top: 2px; }
-        .admin-buttons { display: flex; gap: 8px; }
-        .admin-btn { padding: 8px 12px; background: #1E3A0E; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; }
-        .admin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .admin-save-btn { width: 100%; padding: 12px; background: #1E3A0E; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
         .admin-add-btn { width: 100%; padding: 12px; background: #8CB87A; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
         .admin-form { display: flex; flex-direction: column; gap: 12px; }
-        .foÉ´µ¥¹ÁÕĞìÁ…‘‘¥¹œè€ÄÁÁà€ÄÉÁàì‰½É‘•Èè€ÅÁàÍ½±¥€áÁÔì‰½É‘•ÈµÉ…‘¥ÕÌè€áÁàì™½¹Ğµ™…µ¥±äè€4M…¹Ìœ°Í…¹ÌµÍ•É¥˜ì™½¹ĞµÍ¥é”è€ÄÍÁàìô(€€€€€€€€¹™½É´µ¥¹ÁÕĞé™½ÕÌì½ÕÑ±¥¹”è¹½¹”ì‰½É‘•Èµ½±½Èè€Œáàİìô(€€€€€€€€¹™½É´µ‰ÕÑÑ½¹Ìì‘¥ÍÁ±…äè™±•àì…Àè€ÄÁÁàìô(€€€€€€€€¹™½É´µÍÕ‰µ¥Ğì™±•àè€ÄìÁ…‘‘¥¹œè€ÄÁÁàì‰…­É½Õ¹è€Œáàİì½±½Èèİ¡¥Ñ”ì‰½É‘•Èè¹½¹”ì‰½É‘•ÈµÉ…‘¥ÕÌè€áÁàì™½¹Ğµİ•¥¡Ğè€ØÀÀìÕÉÍ½ÈèÁ½¥¹Ñ•Èìô(€€€€€€€€¹™½É´µ…¹•°ì™±•àè€ÄìÁ…‘‘¥¹œè€ÄÁÁàì‰…­É½Õ¹è€áÁÔì½±½Èè€ŒÙÔÔÌàì‰½É‘•Èè¹½¹”ì‰½É‘•ÈµÉ…‘¥ÕÌè€áÁàì™½¹Ğµİ•¥¡Ğè€ØÀÀìÕÉÍ½ÈèÁ½¥¹Ñ•Èìô((€€€€€€€­•å™É…µ•Ì™…‘•%¸ì™É½´ì½Á…¥Ñäè€ÀìôÑ¼ì½Á…¥Ñäè€Äìôô(€€€€€€€­•å™É…µ•ÌÍ±¥‘•UÀì™É½´ìÑÉ…¹Í™½É´èÑÉ…¹Í±…Ñ•d ÄÀÀ”¤ìôÑ¼ìÑÉ…¹Í™½É´èÑÉ…¹Í±…Ñ•d À¤ìôô(€€€€€ôğ½ÍÑå±”ø((€€€€€íµ½‘…±A±…¹Ğ€„ôô¹Õ±°€˜˜€ñA±…¹Ñ5½‘…°(€€€€€€€Á±…¹ĞõíÁ±…¹ÑÍmµ½‘…±A±…¹Ğ€´€Åuô(€€€€€€€Á¥õíµ½‘…±A±…¹Ñô(€€€€€€€İ••­±å5…Àõíİ••­±å5…Áô(€€€€€€€É…É•É½ÕÀõíÉ…É•É½ÕÁô(€€€€€€€½¹±½Í”õì ¤€ôøÍ•Ñ5½‘…±A±…¹Ğ¡¹Õ±°¥ô(€€€€€€¼ùô((€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘Èˆø(€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘ÈµÑ½Àˆø(€€€€€€€€€€ñ‘¥Øø(€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘ÈµÑ¥Ñ±”ˆûÂ~2ü[‘áÑµ…¹Õ…°ğ½‘¥Øø(€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡‘ÈµÍÕˆˆùíÁ±…¹Ñ½Õ¹Ñô[aQHƒ
-ÜOY8€¼=9L€¼Iğ½‘¥Øø(€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ù•ÉÍ¥½¸µ‰…‘”ˆùíYIM%=9ôƒ
-Üí!91=ôğ½‘¥Øø(€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€í±…ÍÑ]…Ñ•É•‘1…‰•°¡¡¥ÍÑ½Éä¤€˜˜€ñ‘¥Ø±…ÍÍ9…µ”ô‰‰…‘”µÑ½‘…äˆùí±…ÍÑ]…Ñ•É•‘1…‰•°¡¡¥ÍÑ½Éä¥ôğ½‘¥Øùô(€€€€€€€€ğ½‘¥Øø(€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ…‰Ìˆø(€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÍ9…µ”õíÑ…ˆµ‰Ñ¸€‘íÑ…ˆ€ôôô€‰Í¡•µ„ˆ€ü€‰…Ñ¥Ù”ˆ€è€ˆ‰õô½¹±¥¬õì ¤€ôøÍ•ÑQ…ˆ ‰Í¡•µ„ˆ¥ôù-½µµ…¹‘”ğ½‰ÕÑÑ½¸ø(€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÍ9…µ”õíÑ…ˆµ‰Ñ¸€‘íÑ…ˆ€ôôô€‰Á±…¹ÑÌˆ€ü€‰…Ñ¥Ù”ˆ€è€ˆ‰õô½¹±¥¬õì ¤€ôøÍ•ÑQ…ˆ ‰Á±…¹ÑÌˆ¥ôù±±„Û‘áÑ•Èğ½‰ÕÑÑ½¸ø(€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÍ9…µ”õíÑ…ˆµ‰Ñ¸€‘íÑ…ˆ€ôôô€‰…‘µ¥¸ˆ€ü€‰…Ñ¥Ù”ˆ€è€ˆ‰õô½¹±¥¬õì ¤€ôøÍ•ÑQ…ˆ ‰…‘µ¥¸ˆ¥ôù‘µ¥¸ğ½‰ÕÑÑ½¸ø(€€€€€€€€ğ½‘¥Øø(€€€€€€ğ½‘¥Øø((€€€€€íÑ…ˆ€ôôô€‰Í¡•µ„ˆ€˜˜€ (€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¹½Ñ¥”ˆûÂ~N€ñÍÑÉ½¹œùM¡•µ„èOÙ¹‘…œ€¬=¹Í‘…œ€¬É•‘…œ¸ğ½ÍÑÉ½¹œøğ½‘¥Øø(€€€€€€¥ô((€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰½¹Ñ•¹Ğˆø(€€€€€€€íÑ…ˆ€ôôô€‰Í¡•µ„ˆ€ü€ (€€€€€€€€€ÕÁ½µ¥¹œ¹µ…À ¡•Ø°¤¤€ôøì(€€€€€€€€€€€½¹ÍĞ‘…Ñ•MÑÈ€ô•Ø¹‘…Ñ”¹Ñ½%M=MÑÉ¥¹œ ¤¹ÍÁ±¥Ğ ‰Pˆ¥lÁtì(€€€€€€€€€€€½¹ÍĞ…±±½¹”€ô•Ø¹Á±…¹ÑÌ¹•Ù•Éä¡Á¥€ôø¥Í¡•­•¡‘…Ñ•MÑÈ°Á¥¤¤ì(€€€€€€€€€€€É•ÑÕÉ¸€ (€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰‘…äµ…Éˆ­•äõí¥ôÍÑå±”õíì½Á…¥Ñäè…±±½¹”€ü€À¸Ø€è€Äõôø(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰‘…äµ¡‘Èˆø(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰‘…äµ¡‘Èµ¹…µ”ˆùí•Ø¹‘…å9…µ•ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€ñ‘¥ØÍÑå±”õíì‘¥ÍÁ±…äè€‰™±•àˆ°…±¥¹%Ñ•µÌè€‰•¹Ñ•Èˆõôø(€€€€€€€€€€€€€€€€€€€í•Ø¹¥ÍI…É”€˜˜€ñÍÁ…¸±…ÍÍ9…µ”ô‰É…É”µÁ¥±°ˆøÄÃŠLÄĞ‘…œğ½ÍÁ…¸ùô(€€€€€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÍ9…µ”ô‰‘…äµ¡‘Èµ‘…Ñ”ˆùí™µÑ…Ñ”¡•Ø¹‘…Ñ”¥ôğ½ÍÁ…¸ø(€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€í•Ø¹Á±…¹ÑÌ¹µ…À¡Á¥€ôøì(€€€€€€€€€€€€€€€€€½¹ÍĞÀ€ôÁ±…¹ÑÍmÁ¥€´€Åtì(€€€€€€€€€€€€€€€€€¥˜€ …À¤É•ÑÕÉ¸¹Õ±°ì(€€€€€€€€€€€€€€€€€½¹ÍĞ‘½¹”€ô¥Í¡•­•¡‘…Ñ•MÑÈ°Á¥¤ì(€€€€€€€€€€€€€€€€€É•ÑÕÉ¸€ (€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰ÀµÉ½Üˆ­•äõíÁ¥‘ôø(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆˆ½¹±¥¬õì¡”¤€ôøì”¹ÍÑ½ÁAÉ½Á……Ñ¥½¸ ¤ìÍ•Ñ5½‘…±A±…¹Ğ¡Á¥¤ìõôø(€€€€€€€€€€€€€€€€€€€€€€€€ñ¥µœÍÉŒõí€½Á±…¹ÑÌ¼‘íÀ¹¥µ…•õô…±Ğõí[‘áĞ€Œ‘íÁ¥‘õôİ¥‘Ñ õìĞáô¡•¥¡ĞõìĞáô(€€€€€€€€€€€€€€€€€€€€€€€€€ÍÑå±”õíì½Á…¥Ñäè‘½¹”€ü€À¸Ğ€è€Ä°™¥±Ñ•Èè‘½¹”€ü€‰É…åÍ…±” àÀ”¤ˆ€è€‰¹½¹”ˆõô€¼ø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆµ‰…‘”ˆÍÑå±”õíì‰…­É½Õ¹è‘½¹”€ü€ˆÑáàˆ€èÀ¹½±½ÈõôùíÁ¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Àµ¥¹™¼ˆ½¹±¥¬õì ¤€ôøÑ½±”¡‘…Ñ•MÑÈ°Á¥¥ôÍÑå±”õíì½Á…¥Ñäè‘½¹”€ü€À¸Ô€è€Äõôø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰ÀµÍÁ•¥•ÌˆùíÀ¹¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰ÀµÉÕ±”ˆùíÀ¹ÉÕ±•ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Àµ¡•¬ˆ½¹±¥¬õì ¤€ôøÑ½±”¡‘…Ñ•MÑÈ°Á¥¥ôùí‘½¹”€ü€‹Šrˆ€è€‹Š^,‰ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€¤ì(€€€€€€€€€€€€€€€ô¥ô(€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€¤ì(€€€€€€€€€ô¤(€€€€€€€€¤€èÑ…ˆ€ôôô€‰Á±…¹ÑÌˆ€ü€ (€€€€€€€€€€ğø(€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰…±°µ‘¥Í±…¥µ•ÈˆùÉÑ•É¹„¹•‘…¸ƒ‘È›ÙÉÍ±…œ‰…Í•É…‘”Ã”‰¥±‘•É¹„ƒŠP‰•­Ë‘™Ñ„Ÿ‘É¹„„ğ½Àø(€€€€€€€€€€€íl(€€€€€€€€€€€€€ì±…‰•°è€‰	…É„ÏÙ¹‘…œˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì À¤€˜˜€…À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ì¤€˜˜€…À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ô¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€€€ì±…‰•°è€‰OÙ¹‘…œ€¬½¹Í‘…œˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì À¤€˜˜À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ì¤€˜˜€…À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ô¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€€€ì±…‰•°è€‰OÙ¸€¬½¹Ì€¬™É”ˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì À¤€˜˜À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ì¤€˜˜À¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì Ô¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€€€ì±…‰•°è€‰Y…È€ÄÃŠLÄĞ‘…œˆ°¥‘ÌèÁ±…¹ÑÌ¹µ…À ¡À°¥‘à¤€ôøÀ¹Í¡•‘Õ±”¹¥¹±Õ‘•Ì ‰É…É”ˆ¤€ü¥‘à€¬€Ä€è¹Õ±°¤¹™¥±Ñ•È¡	½½±•…¸¤ô°(€€€€€€€€€€€t¹µ…À¡É½ÕÀ€ôøÉ½ÕÀ¹¥‘Ì¹±•¹Ñ €ø€À€˜˜€ (€€€€€€€€€€€€€€ñ‘¥Ø­•äõíÉ½ÕÀ¹±…‰•±ôø(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Í•Œµ±…‰•°ˆùíÉ½ÕÀ¹±…‰•±ôğ½‘¥Øø(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µ…Éˆø(€€€€€€€€€€€€€€€€€íÉ½ÕÀ¹¥‘Ì¹µ…À¡Á¥€ôøì(€€€€€€€€€€€€€€€€€€€½¹ÍĞÀ€ôÁ±…¹ÑÍmÁ¥€´€Åtì(€€€€€€€€€€€€€€€€€€€¥˜€ …À¤É•ÑÕÉ¸¹Õ±°ì(€€€€€€€€€€€€€€€€€€€É•ÑÕÉ¸€ (€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µÉ½Üˆ­•äõíÁ¥‘ô½¹±¥¬õì ¤€ôøÍ•Ñ5½‘…±A±…¹Ğ¡Á¥¥ôø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆˆø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ¥µœÍÉŒõí€½Á±…¹ÑÌ¼‘íÀ¹¥µ…•õô…±Ğõí[‘áĞ€Œ‘íÁ¥‘õôİ¥‘Ñ õìÔÉô¡•¥¡ĞõìÔÉô€¼ø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Ñ¡Õµˆµ‰…‘”ˆÍÑå±”õíì‰…­É½Õ¹èÀ¹½±½ÈõôùíÁ¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µÉ½ÜµÉ¥¡Ğˆø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µ¹…µ”ˆùíÀ¹ÉÕ±•ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰…±°µÍÁ•¥•ÌˆùíÀ¹¥‘ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡¥ÁÌˆùíÁ±…¹Ñ…åÌ¡Á¥°İ••­±å5…À°É…É•É½ÕÀ¤¹µ…À¡€ôø€ñÍÁ…¸­•äõí‘ô±…ÍÍ9…µ”ô‰¡¥Àˆùí‘ôğ½ÍÁ…¸ø¥ôğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€€€€€€€¤ì(€€€€€€€€€€€€€€€€€ô¥ô(€€€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€€€ğ½‘¥Øø(€€€€€€€€€€€€¤¥ô(€€€€€€€€€€ğ¼ø(€€€€€€€€¤€è€ (€€€€€€€€€€ñ‘µ¥¹Q…ˆÁ±…¹ÑÌõíÁ±…¹ÑÍô½¹M…Ù”õí¡…¹‘±•‘µ¥¹M…Ù•ô½¹‘‘A±…¹Ğõí¡…¹‘±•‘‘A±…¹Ñô€¼ø(€€€€€€€€¥ô(€€€€€€ğ½‘¥Øø(€€€€ğ½‘¥Øø(€€¤ì)ô+rm-input { padding: 10px 12px; border: 1px solid #E8E0D5; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; }
+        .form-input { padding: 10px 12px; border: 1px solid #E8E0D5; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; }
         .form-input:focus { outline: none; border-color: #8CB87A; }
         .form-buttons { display: flex; gap: 10px; }
         .form-submit { flex: 1; padding: 10px; background: #8CB87A; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
         .form-cancel { flex: 1; padding: 10px; background: #E8E0D5; color: #6B5538; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-
+        .room-badge { background: #EEE9DF; color: #6B5538; border: none; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+        .room-select { padding: 4px 8px; border: 1px solid #8CB87A; border-radius: 8px; font-size: 11px; font-family: 'DM Sans', sans-serif; background: white; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
       `}</style>
@@ -446,7 +464,7 @@ export default function VÃ¤xtManual() {
         <div className="hdr-top">
           <div>
             <div className="hdr-title">ğŸŒ¿ VÃ¤xtmanual</div>
-            <div className="hdr-sub">{plantCount} VÃ„XTER Â· SÃ–N / ONS / FRE</div>
+            <div className="hdr-sub">{plants.length} VÃ„XTER Â· SÃ–N / ONS / FRE</div>
             <div className="version-badge">{VERSION} Â· {CHANGELOG}</div>
           </div>
           {lastWateredLabel(history) && <div className="badge-today">{lastWateredLabel(history)}</div>}
@@ -458,9 +476,7 @@ export default function VÃ¤xtManual() {
         </div>
       </div>
 
-      {tab === "schema" && (
-        <div className="notice">ğŸ“… <strong>Schema: SÃ¶ndag + Onsdag + Fredag.</strong></div>
-      )}
+      {tab === "schema" && <div className="notice">ğŸ“– <strong>Schema: SÃ¶ndag + Onsdag + Fredag.</strong></div>}
 
       <div className="content">
         {tab === "schema" ? (
@@ -482,8 +498,8 @@ export default function VÃ¤xtManual() {
                   const done = isChecked(dateStr, pid);
                   return (
                     <div className="p-row" key={pid}>
-                      <div className="thumb" onClick={(e) => { e.stopPropagation(); setModalPlant(pid); }}>
-                        <img src={`/plants/${p.image}`} alt={`VÃ¤xt #${pid}`} width={48} height={48}
+                      <div className="thumb" onClick={() => setModalPlant(pid)}>
+                        <img src={`/plants/${p.image}`} alt={`#${pid}`} width={48} height={48}
                           style={{ opacity: done ? 0.4 : 1, filter: done ? "grayscale(80%)" : "none" }} />
                         <div className="thumb-badge" style={{ background: done ? "#C4B8A8" : p.color }}>{pid}</div>
                       </div>
@@ -491,7 +507,7 @@ export default function VÃ¤xtManual() {
                         <div className="p-species">{p.id}</div>
                         <div className="p-rule">{p.rule}</div>
                       </div>
-                      <div className="p-check" onClick={() => toggle(dateStr, pid)}>{done ? "âœ…" : "â—‹"}</div>
+                      <div className="p-check" onClick={() => toggle(dateStr, pid)}>{done ? "âœ…" : "â—»"}</div>
                     </div>
                   );
                 })}
@@ -500,39 +516,25 @@ export default function VÃ¤xtManual() {
           })
         ) : tab === "plants" ? (
           <>
-            <p className="all-disclaimer">Arterna nedan Ã¤r fÃ¶rslag baserade pÃ¥ bilderna â€” bekrÃ¤fta gÃ¤rna!</p>
-            {[
-              { label: "Bara sÃ¶ndag", ids: plants.map((p, idx) => p.schedule.includes(0) && !p.schedule.includes(3) && !p.schedule.includes(5) ? idx + 1 : null).filter(Boolean) },
-              { label: "SÃ¶ndag + onsdag", ids: plants.map((p, idx) => p.schedule.includes(0) && p.schedule.includes(3) && !p.schedule.includes(5) ? idx + 1 : null).filter(Boolean) },
-              { label: "SÃ¶n + ons + fre", ids: plants.map((p, idx) => p.schedule.includes(0) && p.schedule.includes(3) && p.schedule.includes(5) ? idx + 1 : null).filter(Boolean) },
-              { label: "Var 10â€“14 dag", ids: plants.map((p, idx) => p.schedule.includes("rare") ? idx + 1 : null).filter(Boolean) },
-            ].map(group => group.ids.length > 0 && (
-              <div key={group.label}>
-                <div className="sec-label">{group.label}</div>
-                <div className="all-card">
-                  {group.ids.map(pid => {
-                    const p = plants[pid - 1];
-                    if (!p) return null;
-                    return (
-                      <div className="all-row" key={pid} onClick={() => setModalPlant(pid)}>
-                        <div className="thumb">
-                          <img src={`/plants/${p.image}`} alt={`VÃ¤xt #${pid}`} width={52} height={52} />
-                          <div className="thumb-badge" style={{ background: p.color }}>{pid}</div>
-                        </div>
-                        <div className="all-row-right">
-                          <div className="all-name">{p.rule}</div>
-                          <div className="all-species">{p.id}</div>
-                          <div className="chips">{plantDays(pid, weeklyMap, rareGroup).map(d => <span key={d} className="chip">{d}</span>)}</div>
-                        </div>
+            {Object.entries(plantsByRoom).map(([room, roomPlants]) => (
+              <div className="room-section" key={room}>
+                <div className="room-hdr">ğŸ“ {room} <span style={{ fontWeight: 400, fontSize: 11 }}>({roomPlants.length})</span></div>
+                <div className="gallery-grid">
+                  {roomPlants.map(p => (
+                    <div className="gallery-card" key={p.pid} onClick={() => setModalPlant(p.pid)}>
+                      <img src={`/plants/${p.image}`} alt={p.id} className="gallery-img" />
+                      <div className="gallery-info">
+                        <div className="gallery-name">{p.id}</div>
+                        <div className="gallery-rule">{p.rule}</div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
           </>
         ) : (
-          <AdminTab plants={plants} onSave={handleAdminSave} onAddPlant={handleAddPlant} />
+          <AdminTab plants={plants} onUpdate={handlePlantsUpdate} />
         )}
       </div>
     </div>

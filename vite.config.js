@@ -6,7 +6,7 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf8'))
 const buildDate = new Date().toISOString().split('T')[0]
 
 // Update this string when making notable changes
-const changelog = "Admin-sida: sortera växter, ladda upp nya med bild"
+const changelog = "Drag-n-drop admin, rumsgalleri, förbättrad Alla växter"
 
 export default defineConfig({
   plugins: [react()],
