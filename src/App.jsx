@@ -225,11 +225,11 @@ export default function VäxtManual() {
         .thumb-badge { position: absolute; bottom: 0; right: 0; color: white; border-radius: 6px 0 10px 0; font-size: 10px; font-weight: 700; padding: 1px 4px; line-height: 1.4; }
 
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease; }
-        .modal-content { background: #F5F0E8; border-radius: 20px 20px 0 0; max-height: 85vh; width: 100%; max-width: 500px; overflow-y: auto; position: relative; animation: slideUp 0.3s ease; }
+        .modal-content { background: #F5F0E8; border-radius: 20px 20px 0 0; max-height: 85vh; width: 100%; max-width: 500px; overflow-y: auto; -webkit-overflow-scrolling: touch; position: relative; animation: slideUp 0.3s ease; }
         .modal-close { position: absolute; top: 12px; right: 14px; background: rgba(0,0,0,0.4); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; }
         .modal-img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px 20px 0 0; }
         .modal-badge { position: absolute; top: 216px; left: 16px; color: white; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; }
-        .modal-body { padding: 20px 18px 32px; }
+        .modal-body { padding: 20px 18px 48px; }
         .modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #1E3A0E; }
         .modal-rule { background: white; padding: 12px 14px; border-radius: 12px; font-size: 15px; font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
         .modal-rule-icon { font-size: 18px; }
