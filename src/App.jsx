@@ -3,9 +3,12 @@ import { useState, useEffect } from "react";
 const VERSION = __APP_VERSION__;
 const CHANGELOG = __APP_CHANGELOG__;
 
-// Images live in /public/plants/
+// Thumbnails in /public/plants/, high-res in /public/plants/hires/
 const plantImages = Object.fromEntries(
   Array.from({length: 21}, (_, i) => [i + 1, `/plants/plant_${i + 1}.jpg`])
+);
+const plantImagesHires = Object.fromEntries(
+  Array.from({length: 21}, (_, i) => [i + 1, `/plants/hires/plant_${i + 1}.jpg`])
 );
 
 const plantData = {
@@ -133,7 +136,7 @@ function PlantModal({ pid, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
-        <img src={plantImages[pid]} alt={p.id} className="modal-img" />
+        <img src={plantImagesHires[pid]} alt={p.id} className="modal-img" />
         <div className="modal-badge" style={{ background: p.color }}>#{pid}</div>
         <div className="modal-body">
           <h2 className="modal-title">{p.id}</h2>
