@@ -9,27 +9,48 @@ const plantImages = Object.fromEntries(
 );
 
 const plantData = {
-  1:  { rule: "Lätt fuktig jord",                    id: "Begonia rex",                   color: "#B85C38" },
-  2:  { rule: "Låt torka ut",                         id: "Spindelplanta (Chlorophytum)",  color: "#5A8A5E" },
-  3:  { rule: "Stick fingret 3–5 cm — torr? Vattna", id: "Monstera / Philodendron",       color: "#5A8A5E" },
-  4:  { rule: "Lite vatten, sällan",                  id: "Hyacint / Tulpan (lök)",        color: "#8A6AAB" },
-  5:  { rule: "Håll jämnt fuktig",                    id: "Begonia / Caladium",            color: "#B85C38" },
-  6:  { rule: "Lite vatten, låt nästan torka",        id: "Tropisk buske",                 color: "#5A8A5E" },
-  7:  { rule: "Alltid fuktig",                        id: "Vattenväxt / stickling i glas", color: "#3A7A9A" },
-  8:  { rule: "Torkar snabbt — kolla ofta",           id: "Pothos / Epipremnum",           color: "#5A8A5E" },
-  9:  { rule: "Lite vatten, sällan",                  id: "Lökväxt (hyacint?)",            color: "#8A6AAB" },
-  10: { rule: "Lite vatten, sällan",                  id: "Lökväxt",                       color: "#8A6AAB" },
-  11: { rule: "Lätt fuktig jord",                     id: "Spindelplanta / Gräsväxt",      color: "#5A8A5E" },
-  12: { rule: "Känn på jorden — vattna vid behov",    id: "Hängande tropisk",              color: "#5A8A5E" },
-  13: { rule: "Aldrig torr — vattna frikostigt",      id: "Ormbunke (Nephrolepis)",        color: "#3A7A9A" },
-  14: { rule: "Låt torka helt ut",                    id: "Epiphyllum / Ökenväxt",         color: "#9A7A1A" },
-  15: { rule: "Låt översta lagret torka",             id: "Monstera",                      color: "#5A8A5E" },
-  16: { rule: "Torkar snabbt — kolla ofta",           id: "Caladium / Coleus",             color: "#B85C38" },
-  17: { rule: "Fuktig jord + duscha bladen",          id: "Colocasia / Alocasia",          color: "#3A7A9A" },
-  18: { rule: "Vattna när den börjar hänga",          id: "Oxalis / Begonia (röd)",        color: "#8A3A3A" },
-  19: { rule: "Låt torka ut",                         id: "Gräshängare (Carex/Chlor.)",    color: "#5A8A5E" },
-  20: { rule: "Sällan, men vattna ordentligt",        id: "Monstera / Alocasia (stor)",    color: "#9A7A1A" },
-  21: { rule: "Känn på jorden — vattna vid behov",    id: "Fredslilja (Spathiphyllum)",    color: "#3A7A9A" },
+  1:  { rule: "Lätt fuktig jord",                    id: "Begonia rex",                   color: "#B85C38",
+        wiki: "Begonia rex är en art i begoniasläktet, ursprungligen från nordöstra Indien. Den odlas främst för sina spektakulära, mönstrade blad som kan ha färger i silver, rosa, lila och grönt. Trivs i indirekt ljus och vill ha jämnt fuktig jord utan att stå blöt." },
+  2:  { rule: "Låt torka ut",                         id: "Spindelplanta (Chlorophytum)",  color: "#5A8A5E",
+        wiki: "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Den är en av världens mest populära krukväxter tack vare sin härdighet och luftrenande egenskaper. Plantan bildar långa utlöpare med småplantor som hänger ned som spindlar." },
+  3:  { rule: "Stick fingret 3–5 cm — torr? Vattna", id: "Monstera / Philodendron",       color: "#5A8A5E",
+        wiki: "Monstera deliciosa, även kallad Adams revben efter bladens karaktäristiska hål och flikar, är en klätterväxt från Centralamerikas tropiska skogar. Den är en av de mest populära krukväxterna och kan bli mycket stor inomhus. Trivs i indirekt ljus och vill ha väldränerad jord som får torka upp något mellan vattningarna." },
+  4:  { rule: "Lite vatten, sällan",                  id: "Hyacint / Tulpan (lök)",        color: "#8A6AAB",
+        wiki: "Hyacint är en flerårig blommande lökväxt med ursprung i sydöstra Turkiet och Levantens medelhavskust. Den kom troligen till Sverige under 1600-talet och är mest känd för sina flockar av doftande, färgglada blommor i blått, vitt, rosa, rött eller lila. Blommar på våren och behöver lite vatten under viloperiodens." },
+  5:  { rule: "Håll jämnt fuktig",                    id: "Begonia / Caladium",            color: "#B85C38",
+        wiki: "Begoniasläktet (Begonia) är ett av de tio artrikaste släktena bland gömfröväxter med ungefär 1 800 arter. De flesta kommer från tropiska och subtropiska områden. Odlas som krukväxter för sina dekorativa blad eller vackra blommor och trivs i jämnt fuktig, väldränerad jord." },
+  6:  { rule: "Lite vatten, låt nästan torka",        id: "Tropisk buske (Kroton)",        color: "#5A8A5E",
+        wiki: "Kroton (Codiaeum variegatum) är en törelväxt som först beskrevs av Carl von Linné. Namnet kommer från malajiska 'kodiho' och latin 'variegatum' (brokig). Känd för sina intensivt färgade blad i gult, orange, rött och grönt. Trivs i starkt ljus och vill torka upp något mellan vattningarna." },
+  7:  { rule: "Alltid fuktig",                        id: "Vattenväxt / stickling i glas", color: "#3A7A9A",
+        wiki: "En stickling är en avskuren stam-, gren- eller rotdel av en växt som sätts i vatten eller jord för att slå rot och bilda en ny planta. Sticklingar i vatten bör skyddas från direkt ljus på rotdelen. Många tropiska krukväxter som pothos och monstera rotar sig lätt i vatten." },
+  8:  { rule: "Torkar snabbt — kolla ofta",           id: "Pothos / Epipremnum",           color: "#5A8A5E",
+        wiki: "Gullranka (Epipremnum aureum) är en art i familjen kallaväxter som förekommer naturligt på Sällskapsöarna. I Sverige är den en mycket vanlig och populär krukväxt. Den är lättskött och tålig, med hjärtformade blad som ofta har gula eller vita mönster. Klättrar eller hänger och renar luften." },
+  9:  { rule: "Lite vatten, sällan",                  id: "Lökväxt (hyacint?)",            color: "#8A6AAB",
+        wiki: "Hyacint är en flerårig blommande lökväxt med ursprung i sydöstra Turkiet. Blomfärgen kan vara blå, vit, ljusgul, rosa, röd eller lila. Under viloperioden behöver löken torrt och svalt. Vattna sparsamt — lökar ruttnar lätt av för mycket fukt." },
+  10: { rule: "Lite vatten, sällan",                  id: "Lökväxt",                       color: "#8A6AAB",
+        wiki: "Lökväxter lagrar energi i en underjordisk lök och har ofta en tydlig viloperiod. Under aktiv tillväxt och blomning behöver de måttligt med vatten, men under vila ska jorden vara nästan torr. Vanliga lökväxter inomhus inkluderar hyacint, amaryllis och tulpan." },
+  11: { rule: "Lätt fuktig jord",                     id: "Spindelplanta / Gräsväxt",      color: "#5A8A5E",
+        wiki: "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Den är extremt tålig och anpassningsbar, och klarar både torka och övervattning bättre än de flesta krukväxter. Perfekt för nybörjare och känd för att rena luften." },
+  12: { rule: "Känn på jorden — vattna vid behov",    id: "Hängande tropisk",              color: "#5A8A5E",
+        wiki: "Tremastarblomssläktet (Tradescantia), även kallade båtblommor, är ett växtsläkte i familjen himmelsblommeväxter. Flera arter odlas som krukväxter för sina dekorativa, ofta randiga blad i grönt, lila och silver. De växer snabbt som hängväxter och är lätta att föröka med sticklingar." },
+  13: { rule: "Aldrig torr — vattna frikostigt",      id: "Ormbunke (Nephrolepis)",        color: "#3A7A9A",
+        wiki: "Nephrolepis (svärdsbräken) är ett släkte av bräkenväxter. Den vanligaste arten i odling är Nephrolepis exaltata, känd som Bostonbräken. Den trivs i hög luftfuktighet och jämnt fuktig jord — låt den aldrig torka ut helt. Perfekt för badrum eller kök." },
+  14: { rule: "Låt torka helt ut",                    id: "Epiphyllum / Ökenväxt",         color: "#9A7A1A",
+        wiki: "Bladkaktussläktet (Epiphyllum) omfattar 15–20 arter inom familjen kaktusväxter, ursprungligen från Centralamerika och Mexiko. Till skillnad från ökenkaktus är de flesta epifyter som växer på träd i tropisk regnskog. De har platta, bladlika stammar och behöver torka ut ordentligt mellan vattningarna." },
+  15: { rule: "Låt översta lagret torka",             id: "Monstera",                      color: "#5A8A5E",
+        wiki: "Monstera deliciosa, även kallad Adams revben, är den vanligaste arten i monsterasläktet. De karaktäristiska hålen i bladen utvecklas när plantan mognar. Ursprungligen en klätterväxt från Centralamerikas regnskogar. Låt översta jordlagret torka mellan vattningarna — den ska inte torka ut helt." },
+  16: { rule: "Torkar snabbt — kolla ofta",           id: "Caladium / Coleus",             color: "#B85C38",
+        wiki: "Palettblad (Coleus/Plectranthus scutellarioides) är en flerårig ört med flerfärgade blad, ursprungligen från Sydostasien. Plantan blir 30–80 cm hög och blommar juni–oktober. Känd för sina spektakulära blad i kombinationer av grönt, rött, rosa, gult och lila. Torkar snabbt och vill ha jämnt fuktig jord." },
+  17: { rule: "Fuktig jord + duscha bladen",          id: "Colocasia / Alocasia",          color: "#3A7A9A",
+        wiki: "Alokasiasläktet (Alocasia) omfattar cirka 70 arter i familjen kallaväxter, främst från sydöstra Asien. De har stora, dekorativa blad och kallas ibland \"elefantöron\". Trivs i hög luftfuktighet och jämnt fuktig jord. Duscha gärna bladen regelbundet för att hålla dem friska." },
+  18: { rule: "Vattna när den börjar hänga",          id: "Oxalis / Begonia (röd)",        color: "#8A3A3A",
+        wiki: "Harsyra (Oxalis) är ett släkte i familjen harsyreväxter. Bladen är ätbara med en syrlig smak som kommer av oxalsyra. Många arter odlas som krukväxter för sina dekorativa, trefingrade blad som fälls ihop på natten. Signalerar tydligt när den behöver vatten genom att bladen hänger." },
+  19: { rule: "Låt torka ut",                         id: "Gräshängare (Carex/Chlor.)",    color: "#5A8A5E",
+        wiki: "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Som hängväxt bildar den eleganta utlöpare med småplantor. Extremt tålig och klarar perioder av torka bra, men trivs bäst med regelbunden vattning där jorden får torka ut emellan." },
+  20: { rule: "Sällan, men vattna ordentligt",        id: "Monstera / Alocasia (stor)",    color: "#9A7A1A",
+        wiki: "Monstera deliciosa kan bli mycket stor inomhus med blad som når över en meter i diameter. Som regnväxt vill den ha ordentligt med vatten när den vattnas, men tål att jorden torkar ut en del mellan vattningarna. Ge den en stöttpinne eller mosstotem att klättra på för bästa tillväxt." },
+  21: { rule: "Känn på jorden — vattna vid behov",    id: "Fredslilja (Spathiphyllum)",    color: "#3A7A9A",
+        wiki: "Fredslilja (Spathiphyllum) är en populär krukväxt i familjen kallaväxter, ursprungligen från tropiska Amerika och sydöstra Asien. Känd för sina eleganta vita blommor och mörkgröna, blanka blad. En av de bästa luftrenande växterna enligt NASA. Signalerar tydligt när den behöver vatten genom att bladen sjunker." },
 };
 
 const weeklyMap = {
@@ -105,10 +126,36 @@ function lastWateredLabel(history) {
   return `💧 Vattnade ${last.getDate()} ${MON[last.getMonth()]}`;
 }
 
+function PlantModal({ pid, onClose }) {
+  const p = plantData[pid];
+  if (!p) return null;
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>✕</button>
+        <img src={plantImages[pid]} alt={p.id} className="modal-img" />
+        <div className="modal-badge" style={{ background: p.color }}>#{pid}</div>
+        <div className="modal-body">
+          <h2 className="modal-title">{p.id}</h2>
+          <div className="modal-rule">
+            <span className="modal-rule-icon">💧</span>
+            {p.rule}
+          </div>
+          <div className="modal-schedule">
+            {plantDays(pid).map(d => <span key={d} className="chip">{d}</span>)}
+          </div>
+          <p className="modal-wiki">{p.wiki}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function VäxtManual() {
   const [tab, setTab] = useState("schema");
   const [history, setHistory] = useState({});
   const [loaded, setLoaded] = useState(false);
+  const [modalPlant, setModalPlant] = useState(null);
 
   useEffect(() => {
     loadHistoryFromServer().then(h => { setHistory(purgeOld(h)); setLoaded(true); });
@@ -160,8 +207,9 @@ export default function VäxtManual() {
         .p-rule { font-size: 14px; font-weight: 500; margin-top: 1px; }
         .p-check { font-size: 18px; flex-shrink: 0; }
         .all-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 14px; }
-        .all-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EBE0; }
+        .all-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EBE0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .all-row:last-child { border-bottom: none; }
+        .all-row:active { background: #F5F0E8; }
         .chips { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
         .chip { background: #EEE9DF; color: #6B5538; padding: 2px 7px; border-radius: 8px; font-size: 11px; font-weight: 500; }
         .all-row-right { flex: 1; }
@@ -172,7 +220,24 @@ export default function VäxtManual() {
         .thumb { position: relative; flex-shrink: 0; }
         .thumb img { display: block; border-radius: 10px; object-fit: cover; }
         .thumb-badge { position: absolute; bottom: 0; right: 0; color: white; border-radius: 6px 0 10px 0; font-size: 10px; font-weight: 700; padding: 1px 4px; line-height: 1.4; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease; }
+        .modal-content { background: #F5F0E8; border-radius: 20px 20px 0 0; max-height: 85vh; width: 100%; max-width: 500px; overflow-y: auto; position: relative; animation: slideUp 0.3s ease; }
+        .modal-close { position: absolute; top: 12px; right: 14px; background: rgba(0,0,0,0.4); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; }
+        .modal-img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px 20px 0 0; }
+        .modal-badge { position: absolute; top: 216px; left: 16px; color: white; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; }
+        .modal-body { padding: 20px 18px 32px; }
+        .modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #1E3A0E; }
+        .modal-rule { background: white; padding: 12px 14px; border-radius: 12px; font-size: 15px; font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .modal-rule-icon { font-size: 18px; }
+        .modal-schedule { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+        .modal-wiki { font-size: 14px; line-height: 1.6; color: #4A4030; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
       `}</style>
+
+      {modalPlant && <PlantModal pid={modalPlant} onClose={() => setModalPlant(null)} />}
 
       <div className="hdr">
         <div className="hdr-top">
@@ -211,17 +276,17 @@ export default function VäxtManual() {
                   const p = plantData[pid];
                   const done = isChecked(dateStr, pid);
                   return (
-                    <div className="p-row" key={pid} onClick={() => toggle(dateStr, pid)}>
-                      <div className="thumb">
+                    <div className="p-row" key={pid}>
+                      <div className="thumb" onClick={(e) => { e.stopPropagation(); setModalPlant(pid); }}>
                         <img src={plantImages[pid]} alt={`Växt #${pid}`} width={48} height={48}
                           style={{ opacity: done ? 0.4 : 1, filter: done ? "grayscale(80%)" : "none" }} />
                         <div className="thumb-badge" style={{ background: done ? "#C4B8A8" : p.color }}>{pid}</div>
                       </div>
-                      <div className="p-info" style={{ opacity: done ? 0.5 : 1 }}>
+                      <div className="p-info" onClick={() => toggle(dateStr, pid)} style={{ opacity: done ? 0.5 : 1 }}>
                         <div className="p-species">{p.id}</div>
                         <div className="p-rule">{p.rule}</div>
                       </div>
-                      <div className="p-check">{done ? "✅" : "○"}</div>
+                      <div className="p-check" onClick={() => toggle(dateStr, pid)}>{done ? "✅" : "○"}</div>
                     </div>
                   );
                 })}
@@ -243,7 +308,7 @@ export default function VäxtManual() {
                   {group.ids.map(pid => {
                     const p = plantData[pid];
                     return (
-                      <div className="all-row" key={pid}>
+                      <div className="all-row" key={pid} onClick={() => setModalPlant(pid)}>
                         <div className="thumb">
                           <img src={plantImages[pid]} alt={`Växt #${pid}`} width={52} height={52} />
                           <div className="thumb-badge" style={{ background: p.color }}>{pid}</div>
