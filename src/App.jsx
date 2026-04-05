@@ -522,7 +522,7 @@ export default function Växtmanual() {
                 <div className="gallery-grid">
                   {roomPlants.map(p => (
                     <div className="gallery-card" key={p.pid} onClick={() => setModalPlant(p.pid)}>
-                      <img src={`/plants/${p.image}`} alt={p.id} className="gallery-img" />
+                      <img src={`/plants/hires/${p.image}`} alt={p.id} className="gallery-img" loading="lazy" />
                       <div className="gallery-info">
                         <div className="gallery-name">{p.id}</div>
                         <div className="gallery-rule">{p.rule}</div>
