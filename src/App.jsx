@@ -57,9 +57,9 @@ const plantData = {
 };
 
 const weeklyMap = {
+  0: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 21],
+  3: [1, 3, 5, 7, 8, 12, 13, 16, 17, 18, 21],
   5: [5, 7, 8, 13, 17, 21],
-  3: [1, 2, 3, 6, 12, 16, 18, 19],
-  0: [4, 5, 7, 8, 9, 10, 11, 13, 17, 21],
 };
 const rareGroup = [14, 15, 20];
 const TODAY = new Date();
@@ -300,9 +300,9 @@ export default function VäxtManual() {
           <>
             <p className="all-disclaimer">Arterna nedan är förslag baserade på bilderna — bekräfta gärna!</p>
             {[
-              { label: "Söndag", ids: [4, 5, 7, 8, 9, 10, 11, 13, 17, 21] },
-              { label: "Onsdag", ids: [1, 2, 3, 6, 12, 16, 18, 19] },
-              { label: "Fredag", ids: [5, 7, 8, 13, 17, 21] },
+              { label: "Bara söndag", ids: [2, 4, 6, 9, 10, 11, 19] },
+              { label: "Söndag + onsdag", ids: [1, 3, 12, 16, 18] },
+              { label: "Sön + ons + fre", ids: [5, 7, 8, 13, 17, 21] },
               { label: "Var 10–14 dag", ids: [14, 15, 20] },
             ].map(group => (
               <div key={group.label}>
