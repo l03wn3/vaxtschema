@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const VERSION = "v2.1 – 2026-04-02";
+const VERSION = __APP_VERSION__;
 
 // Images live in /public/plants/
 const plantImages = Object.fromEntries(
@@ -37,7 +37,7 @@ const weeklyMap = {
   0: [4, 5, 7, 8, 9, 10, 11, 13, 17, 21],
 };
 const rareGroup = [14, 15, 20];
-const TODAY = new Date(2026, 3, 2);
+const TODAY = new Date();
 const STORAGE_KEY = "vaxtmanual_history";
 const RETENTION_DAYS = 7;
 
