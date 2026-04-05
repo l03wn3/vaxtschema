@@ -179,9 +179,10 @@ function AdminTab({ plants, onUpdate }) {
   const [editingRoom, setEditingRoom] = useState(null); // idx of plant being room-edited
   const [newRoom, setNewRoom] = useState("");
   const [showNewRoom, setShowNewRoom] = useState(false);
+  const [customRooms, setCustomRooms] = useState([]);
 
   const colors = [...new Set(plants.map(p => p.color))];
-  const allRooms = [...new Set([...DEFAULT_ROOMS, ...plants.map(p => p.room).filter(Boolean)])];
+  const allRooms = [...new Set([...DEFAULT_ROOMS, ...customRooms, ...plants.map(p => p.room).filter(Boolean)])];
 
   const handleReorder = (newOrder) => {
     onUpdate(newOrder);
@@ -195,10 +196,11 @@ function AdminTab({ plants, onUpdate }) {
   };
 
   const handleAddRoom = () => {
-    if (newRoom.trim()) {
-      setShowNewRoom(false);
-      // Room gets added when assigned to a plant
+    if (newRoom.trim() && !allRooms.includes(newRoom.trim())) {
+      setCustomRooms(prev => [...prev, newRoom.trim()]);
     }
+    setNewRoom('');
+    setShowNewRoom(false);
   };
 
   const handleAddPlant = async () => {
