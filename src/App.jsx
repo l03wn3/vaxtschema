@@ -87,6 +87,7 @@ function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose }) {
         <div className="modal-body">
           <h2 className="modal-title">{plant.id}</h2>
           <div className="modal-rule"><span className="modal-rule-icon">💧</span>{plant.rule}</div>
+          {plant.placement && <div className="modal-rule" style={{ background: "#F0F7ED" }}><span className="modal-rule-icon">☀️</span>{plant.placement}</div>}
           <div className="modal-schedule">
             {plantDays(pid, weeklyMap, rareGroup).map(d => <span key={d} className="chip">{d}</span>)}
           </div>
