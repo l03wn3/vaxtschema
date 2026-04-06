@@ -241,13 +241,14 @@
         "room": "K\u00f6k"
     },
     {
-        "id": "H\u00e4ngande tropisk",
-        "rule": "K\u00e4nn p\u00e5 jorden \u2014 vattna vid behov",
-        "color": "#5A8A5E",
-        "wiki": "Tremastarblomssl\u00e4ktet (Tradescantia), \u00e4ven kallade b\u00e5tblommor, \u00e4r ett v\u00e4xtsl\u00e4kte i familjen himmelsblommev\u00e4xter. Flera arter odlas som krukv\u00e4xter f\u00f6r sina dekorativa, ofta randiga blad i gr\u00f6nt, lila och silver. De v\u00e4xer snabbt som h\u00e4ngv\u00e4xter och \u00e4r l\u00e4tta att f\u00f6r\u00f6ka med sticklingar.",
+        "id": "Palettblad",
+        "rule": "H\u00e5ll j\u00e4mnt fuktig \u2014 torkar snabbt",
+        "color": "#B85C38",
+        "wiki": "Palettblad (Coleus/Plectranthus scutellarioides) \u00e4r en fler\u00e5rig \u00f6rt fr\u00e5n Sydostasien med spektakul\u00e4rt flerf\u00e4rgade blad i kombinationer av gr\u00f6nt, r\u00f6tt, rosa, gult och lila. Trivs i ljust till halvskuggigt l\u00e4ge. Torkar ut snabbt och beh\u00f6ver vattnas ofta. Knip av blommor f\u00f6r t\u00e4tare bladv\u00e4xt.",
         "schedule": [
             0,
-            3
+            3,
+            5
         ],
         "image": "plant_12.jpg",
         "room": "K\u00f6k"
