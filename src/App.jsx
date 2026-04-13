@@ -46,11 +46,12 @@ function deriveScheduleMaps(plants) {
 
 function generateUpcoming(plants, weeklyMap, rareGroup) {
   const events = [];
-  for (let d = 0; d <= 14; d++) {
+  // Include past 3 days so users can check/verify recent watering
+  for (let d = -3; d <= 14; d++) {
     const date = new Date(TODAY); date.setDate(TODAY.getDate() + d);
     const dow = date.getDay();
     if (!weeklyMap[dow]) continue;
-    events.push({ date, dayName: SW[dow], plants: weeklyMap[dow] });
+    events.push({ date, dayName: SW[dow], plants: weeklyMap[dow], isPast: d < 0 });
   }
   if (rareGroup.length > 0) {
     const rareDate = new Date(TODAY); rareDate.setDate(TODAY.getDate() + 12);
@@ -485,11 +486,15 @@ export default function Växtmanual() {
         {tab === "schema" ? (
           upcoming.map((ev, i) => {
             const dateStr = ev.date.toISOString().split("T")[0];
+            const isToday = dateStr === TODAY.toISOString().split("T")[0];
             const allDone = ev.plants.every(pid => isChecked(dateStr, pid));
             return (
-              <div className="day-card" key={i} style={{ opacity: allDone ? 0.6 : 1 }}>
-                <div className="day-hdr">
-                  <div className="day-hdr-name">{ev.dayName}</div>
+              <div className="day-card" key={i} style={{ opacity: allDone ? 0.6 : ev.isPast ? 0.75 : 1 }}>
+                <div className="day-hdr" style={{ background: ev.isPast ? "#4A4030" : isToday ? "#2A5A1A" : "#1E3A0E" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div className="day-hdr-name">{ev.dayName}</div>
+                    {isToday && <span style={{ background: "#8CB87A", color: "#1E3A0E", padding: "1px 8px", borderRadius: 10, fontSize: 10, fontWeight: 700 }}>IDAG</span>}
+                  </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     {ev.isRare && <span className="rare-pill">10–14 dag</span>}
                     <span className="day-hdr-date">{fmtDate(ev.date)}</span>
