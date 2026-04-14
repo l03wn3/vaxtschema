@@ -1,372 +1,355 @@
 [
-  {
-    "id": "Fredslilja (Spathiphyllum)",
-    "rule": "Känn på jorden — vattna vid behov",
-    "color": "#3A7A9A",
-    "wiki": "Fredslilja (Spathiphyllum) är en populär krukväxt i familjen kallaväxter, ursprungligen från tropiska Amerika och sydöstra Asien. Känd för sina eleganta vita blommor och mörkgröna, blanka blad. En av de bästa luftrenande växterna enligt NASA. Signalerar tydligt när den behöver vatten genom att bladen sjunker.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_21.jpg",
-    "room": "Vardagsrum",
-    "placement": "Indirekt ljus, tål skugga. Undvik direkt sol.",
-    "repotInterval": 18,
-    "repotTip": "Omplantera när rötterna tränger ut. Vårens början är bäst.",
-    "repotted": null
-  },
-  {
-    "id": "Begonia rex",
-    "rule": "Lätt fuktig jord",
-    "color": "#B85C38",
-    "wiki": "Begonia rex är en art i begoniasläktet, ursprungligen från nordöstra Indien. Den odlas främst för sina spektakulära, mönstrade blad som kan ha färger i silver, rosa, lila och grönt. Trivs i indirekt ljus och vill ha jämnt fuktig jord utan att stå blöt.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_1.jpg",
-    "room": "Vardagsrum",
-    "placement": "Indirekt ljus, halvskugga. Ingen direkt sol.",
-    "repotInterval": 12,
-    "repotTip": "Omplantera varje vår i lätt, luftig jord.",
-    "repotted": null
-  },
-  {
-    "id": "Kalatea (Calathea roseopicta)",
-    "rule": "Håll jämnt fuktig, undvik kalkvatten",
-    "color": "#3A7A9A",
-    "wiki": "Calathea roseopicta är en tropisk växt i familjen marantaväxter, ursprungligen från Brasilien. Känd för sina runda blad med vacker rosa-grön teckning på ovansidan och lila undersida. Trivs i indirekt ljus och hög luftfuktighet. Vattna med ljummet, kalkfritt vatten och håll jorden jämnt fuktig utan att den blir blöt.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_17.jpg",
-    "room": "Vardagsrum",
-    "placement": "Indirekt ljus, hög luftfuktighet. Ingen direkt sol.",
-    "repotInterval": 18,
-    "repotTip": "Omplantera på våren. Använd humusrik, väldränerad jord.",
-    "repotted": null
-  },
-  {
-    "id": "Echeveria (Succulent)",
-    "rule": "Mycket sällan, låt torka helt",
-    "color": "#9A7A1A",
-    "wiki": "Echeveria är ett släkte suckulenter i familjen fetbladsväxter, ursprungligen från Mexiko och Centralamerika. De bildar eleganta rosetter av köttiga blad i grönt, blått, rosa eller lila. Behöver mycket ljus och väldigt lite vatten — låt jorden torka ut helt mellan vattningarna.",
-    "schedule": [
-      "rare"
-    ],
-    "image": "plant_23.jpg",
-    "room": "Vardagsrum",
-    "placement": "Starkt direkt ljus, soligt fönster. Sval vinterplats.",
-    "repotInterval": 24,
-    "repotTip": "Omplantera vartannat år i kaktusjord. Låt torka efter.",
-    "repotted": null
-  },
-  {
-    "id": "Palettblad",
-    "rule": "Håll jämnt fuktig — torkar snabbt",
-    "color": "#B85C38",
-    "wiki": "Palettblad (Coleus/Plectranthus scutellarioides) är en flerårig ört från Sydostasien med spektakulärt flerfärgade blad i kombinationer av grönt, rött, rosa, gult och lila. Trivs i ljust till halvskuggigt läge. Torkar ut snabbt och behöver vattnas ofta. Knip av blommor för tätare bladväxt.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_16.jpg",
-    "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol.",
-    "repotInterval": 12,
-    "repotTip": "Växer snabbt — omplantera varje vår i näringsrik jord.",
-    "repotted": null
-  },
-  {
-    "id": "Skvättiväg (Euphorbia leuconeura)",
-    "rule": "Låt översta jorden torka mellan vattningar",
-    "color": "#5A8A5E",
-    "wiki": "Skvättiväg (Euphorbia leuconeura) är en törelväxt från Madagaskar. Kallas skvättiväg för att den skjuter iväg sina frön med kraft. Har en tjock, kantig stam med dekorativa bladärr och mörkgröna blad med vita bladnerver. Trivs i ljust läge och vill ha regelbunden vattning — låt jorden torka upp i ytan mellan vattningarna.",
-    "schedule": [
-      0
-    ],
-    "image": "plant_14.jpg",
-    "room": "Vardagsrum",
-    "placement": "Ljust läge, lite direkt sol OK. Tål halvskugga.",
-    "repotInterval": 18,
-    "repotTip": "Omplantera vid behov. Varning: vit mjölksaft irriterar huden.",
-    "repotted": null
-  },
-  {
-    "id": "Murgröna (Hedera helix)",
-    "rule": "Låt torka ut mellan vattningar",
-    "color": "#5A8A5E",
-    "wiki": "Murgröna (Hedera helix) är en klätterväxt i familjen araliaväxter. Den är en av få europeiska lianer och kan bli mycket gammal. Som krukväxt är den populär för sina dekorativa, flikiga blad. Trivs i sval, ljus miljö och vill torka ut något mellan vattningarna.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_22.jpg",
-    "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt, svalt. Undvik stark sol och värme.",
-    "repotInterval": 24,
-    "repotTip": "Omplantera vartannat år eller när rötterna fyller krukan.",
-    "repotted": null
-  },
-  {
-    "id": "Skvättiväg (Euphorbia leuconeura)",
-    "rule": "Låt översta jorden torka mellan vattningar",
-    "color": "#5A8A5E",
-    "wiki": "Skvättiväg (Euphorbia leuconeura) är en törelväxt från Madagaskar. Kallas skvättiväg för att den skjuter iväg sina frön med kraft. Har en tjock, kantig stam med dekorativa bladärr och mörkgröna blad med vita bladnerver. Trivs i ljust läge och vill ha regelbunden vattning — låt jorden torka upp i ytan mellan vattningarna.",
-    "schedule": [
-      0
-    ],
-    "image": "plant_15.jpg",
-    "room": "Vardagsrum",
-    "placement": "Ljust läge, lite direkt sol OK. Tål halvskugga.",
-    "repotInterval": 18,
-    "repotTip": "Omplantera vid behov. Varning: vit mjölksaft irriterar huden.",
-    "repotted": null
-  },
-  {
-    "id": "Triangeloxalis",
-    "rule": "Vattna när den börjar hänga",
-    "color": "#8A3A3A",
-    "wiki": "Triangeloxalis (Oxalis triangularis) är en lökväxt från Brasilien med trekantiga, djupt purpurfärgade blad som fälls ihop på natten och i starkt solljus. Blommar med små vita eller rosa blommor. Trivs i ljust till halvskuggigt läge. Vattna ordentligt och låt sedan jorden torka upp något — signalerar tydligt behov genom att bladen hänger.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_18.jpg",
-    "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt. Klarar lite direkt morgonsol.",
-    "repotInterval": 24,
-    "repotTip": "Dela knölarna vid omplantering. Vilar på sommaren.",
-    "repotted": null
-  },
-  {
-    "id": "Calathea Orbifolia",
-    "rule": "Håll jämnt fuktig, hög luftfuktighet",
-    "color": "#3A7A9A",
-    "wiki": "Calathea orbifolia är en storväxt marantaväxt från Bolivia med stora, runda blad med silvergröna ränder. En av de mest dekorativa kalateorna. Kräver hög luftfuktighet och jämnt fuktig jord. Vattna med kalkfritt vatten och placera i indirekt ljus. Känslig för drag och temperaturväxlingar.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_20.jpg",
-    "room": "Vardagsrum",
-    "placement": "Indirekt ljus, hög luftfuktighet. Känslig för drag.",
-    "repotInterval": 18,
-    "repotTip": "Omplantera på våren i väldränerad, humusrik jord.",
-    "repotted": null
-  },
-  {
-    "id": "Ormbunke (Nephrolepis)",
-    "rule": "Aldrig torr — vattna frikostigt",
-    "color": "#3A7A9A",
-    "wiki": "Nephrolepis (svärdsbräken) är ett släkte av bräkenväxter. Den vanligaste arten i odling är Nephrolepis exaltata, känd som Bostonbräken. Den trivs i hög luftfuktighet och jämnt fuktig jord — låt den aldrig torka ut helt. Perfekt för badrum eller kök.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_13.jpg",
-    "room": "Vardagsrum",
-    "placement": "Halvskugga till indirekt ljus. Hög luftfuktighet, perfekt i badrum.",
-    "repotInterval": 12,
-    "repotTip": "Omplantera varje vår. Dela vid behov. Torvbaserad jord.",
-    "repotted": null
-  },
-  {
-    "id": "Ampellilja",
-    "rule": "Håll lätt fuktig, tål kortare torka",
-    "color": "#5A8A5E",
-    "wiki": "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Som hängväxt bildar den eleganta utlöpare med småplantor. Extremt tålig och klarar perioder av torka, men trivs bäst med jämn fukt. En av de bästa luftrenande krukväxterna.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_19.jpg",
-    "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt. Tål de flesta lägen, mycket tålig.",
-    "repotInterval": 12,
-    "repotTip": "Omplantera varje vår. Lätt att dela — plantera ut utlöparna.",
-    "repotted": null
-  },
-  {
-    "id": "Lökväxt",
-    "rule": "Lite vatten, sällan",
-    "color": "#8A6AAB",
-    "wiki": "Lökväxter lagrar energi i en underjordisk lök och har ofta en tydlig viloperiod. Under aktiv tillväxt och blomning behöver de måttligt med vatten, men under vila ska jorden vara nästan torr. Vanliga lökväxter inomhus inkluderar hyacint, amaryllis och tulpan.",
-    "schedule": [
-      0
-    ],
-    "image": "plant_10.jpg",
-    "room": "Kök",
-    "placement": "Ljust, svalt läge. Lite direkt sol OK under blomning.",
-    "repotInterval": 0,
-    "repotTip": "Lökar behöver sällan omplantering. Plantera ut efter blomning.",
-    "repotted": null
-  },
-  {
-    "id": "Lökväxt (hyacint?)",
-    "rule": "Lite vatten, sällan",
-    "color": "#8A6AAB",
-    "wiki": "Hyacint är en flerårig blommande lökväxt med ursprung i sydöstra Turkiet. Blomfärgen kan vara blå, vit, ljusgul, rosa, röd eller lila. Under viloperioden behöver löken torrt och svalt. Vattna sparsamt — lökar ruttnar lätt av för mycket fukt.",
-    "schedule": [
-      0
-    ],
-    "image": "plant_9.jpg",
-    "room": "Kök",
-    "placement": "Ljust, svalt läge. Direkt sol OK.",
-    "repotInterval": 0,
-    "repotTip": "Hyacintlökar planteras ut i trädgården efter blomning.",
-    "repotted": null
-  },
-  {
-    "id": "Plocksallad",
-    "rule": "Håll alltid fuktig — torkar ut snabbt",
-    "color": "#5A8A5E",
-    "wiki": "Plocksallad (Lactuca sativa var. crispa) är en snabbväxande bladgrönsak som lätt odlas inomhus på en ljus fönsterbräda. Skörda blad från utsidan och låt hjärtat växa vidare. Kräver mycket ljus och jämn fukt — låt aldrig jorden torka ut helt. Så nya frön var tredje vecka för kontinuerlig skörd.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_8.jpg",
-    "room": "Kök",
-    "placement": "Starkt ljus, gärna direkt sol. Solig fönsterbräda.",
-    "repotInterval": 0,
-    "repotTip": "Så om istället för att omplantera. Ny skörd var 3:e vecka.",
-    "repotted": null
-  },
-  {
-    "id": "Tropisk buske (Kroton)",
-    "rule": "Lite vatten, låt nästan torka",
-    "color": "#5A8A5E",
-    "wiki": "Kroton (Codiaeum variegatum) är en törelväxt som först beskrevs av Carl von Linné. Namnet kommer från malajiska 'kodiho' och latin 'variegatum' (brokig). Känd för sina intensivt färgade blad i gult, orange, rött och grönt. Trivs i starkt ljus och vill torka upp något mellan vattningarna.",
-    "schedule": [
-      0
-    ],
-    "image": "plant_6.jpg",
-    "room": "Kök",
-    "placement": "Starkt ljus, gärna direkt sol. Tappar färg i skugga.",
-    "repotInterval": 24,
-    "repotTip": "Omplantera vartannat år på våren. Tappar blad vid stress.",
-    "repotted": null
-  },
-  {
-    "id": "Saintpaulia",
-    "rule": "Vattna underifrån, låt ytan torka lätt",
-    "color": "#8A6AAB",
-    "wiki": "Saintpaulia (Afrikansk viol) är en liten krukväxt från Tanzanias bergsskogar. Blommar rikligt i violett, rosa, vitt eller blått nästan året runt med rätt skötsel. Vattna underifrån — bladen är känsliga för vattenstänk. Trivs i ljust läge utan direkt sol och i rumstemperatur.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_5.jpg",
-    "room": "Kök",
-    "placement": "Ljust utan direkt sol. Rumstemperatur, känslig för kyla.",
-    "repotInterval": 12,
-    "repotTip": "Omplantera varje år i specialjord för saintpaulia. Liten kruka.",
-    "repotted": null
-  },
-  {
-    "id": "Påsklilja",
-    "rule": "Håll jämnt lätt fuktig",
-    "color": "#8A6AAB",
-    "wiki": "Påsklilja (Narcissus) är en lökväxt från Sydeuropa och Nordafrika. Blommar på våren med gula eller vita blommor med en trumpetformad bikrona. Inomhus trivs de i svalt, ljust läge. Håll jorden lätt fuktig under blomning men undvik övervattning. Efter blomning kan löken planteras ut i trädgården.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_4.jpg",
-    "room": "Kök",
-    "placement": "Ljust, svalt läge. Håller sig längre i sval temperatur.",
-    "repotInterval": 0,
-    "repotTip": "Plantera ut löken i trädgården efter blomning.",
-    "repotted": null
-  },
-  {
-    "id": "Mynta",
-    "rule": "Alltid fuktig",
-    "color": "#5A8A5E",
-    "wiki": "Mynta (Mentha) är en flerårig ört i familjen kransblommiga växter. Finns i många sorter som pepparmynta, grönmynta och citronmynta. Växer snabbt och sprider sig villigt. Trivs i ljust till halvskuggigt läge och vill ha jämnt fuktig jord — låt den aldrig torka ut helt. Perfekt att odla i kök för färsk skörd.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_7.jpg",
-    "room": "Kök",
-    "placement": "Ljust till halvskuggigt. Solig fönsterbräda i kök är perfekt.",
-    "repotInterval": 12,
-    "repotTip": "Omplantera varje vår — växer aggressivt och fyller krukan snabbt.",
-    "repotted": null
-  },
-  {
-    "id": "Påsklilja",
-    "rule": "Håll jämnt lätt fuktig",
-    "color": "#8A6AAB",
-    "wiki": "Påsklilja (Narcissus) är en lökväxt från Sydeuropa och Nordafrika. Blommar på våren med gula eller vita blommor med en trumpetformad bikrona. Inomhus trivs de i svalt, ljust läge. Håll jorden lätt fuktig under blomning men undvik övervattning. Efter blomning kan löken planteras ut i trädgården.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_11.jpg",
-    "room": "Kök",
-    "placement": "Ljust, svalt läge. Håller sig längre i sval temperatur.",
-    "repotInterval": 0,
-    "repotTip": "Plantera ut löken i trädgården efter blomning.",
-    "repotted": null
-  },
-  {
-    "id": "Palettblad",
-    "rule": "Håll jämnt fuktig — torkar snabbt",
-    "color": "#B85C38",
-    "wiki": "Palettblad (Coleus/Plectranthus scutellarioides) är en flerårig ört från Sydostasien med spektakulärt flerfärgade blad i kombinationer av grönt, rött, rosa, gult och lila. Trivs i ljust till halvskuggigt läge. Torkar ut snabbt och behöver vattnas ofta. Knip av blommor för tätare bladväxt.",
-    "schedule": [
-      0,
-      3,
-      5
-    ],
-    "image": "plant_12.jpg",
-    "room": "Kök",
-    "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol.",
-    "repotInterval": 12,
-    "repotTip": "Växer snabbt — omplantera varje vår i näringsrik jord.",
-    "repotted": null
-  },
-  {
-    "id": "Ampellilja",
-    "rule": "Håll lätt fuktig, tål kortare torka",
-    "color": "#5A8A5E",
-    "wiki": "Ampellilja (Chlorophytum comosum) är en växtart i familjen sparrisväxter från tropiska Afrika. Bildar långa utlöpare med småplantor som hänger ned. Extremt tålig och en av de mest populära krukväxterna tack vare sin härdighet och luftrenande egenskaper.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_2.jpg",
-    "room": "Kök",
-    "placement": "Ljust till halvskuggigt. Tål de flesta lägen, mycket tålig.",
-    "repotInterval": 12,
-    "repotTip": "Omplantera varje vår. Lätt att dela — plantera ut utlöparna.",
-    "repotted": null
-  },
-  {
-    "id": "Klätterkalla",
-    "rule": "Låt översta jorden torka, vattna sedan",
-    "color": "#5A8A5E",
-    "wiki": "Klätterkalla (Scindapsus/Epipremnum) är en klättrande tropisk växt från Sydostasien. Har hjärtformade blad som kan vara gröna, marmorerade eller silvermönstrade beroende på sort. Mycket lättskött — trivs i de flesta ljusförhållanden. Låt jorden torka upp i ytan mellan vattningar. Perfekt hängväxt eller klätterväxt med stöd.",
-    "schedule": [
-      0,
-      3
-    ],
-    "image": "plant_3.jpg",
-    "room": "Kontor",
-    "placement": "Ljust till halvskuggigt. Tål skuggiga lägen, mycket anpassningsbar.",
-    "repotInterval": 18,
-    "repotTip": "Omplantera när rötterna tränger ut. Vanlig blomjord fungerar.",
-    "repotted": null
-  }
+    {
+        "id": "Fredslilja (Spathiphyllum)",
+        "rule": "K\u00e4nn p\u00e5 jorden \u2014 vattna vid behov",
+        "color": "#3A7A9A",
+        "wiki": "Fredslilja (Spathiphyllum) \u00e4r en popul\u00e4r krukv\u00e4xt i familjen kallav\u00e4xter, ursprungligen fr\u00e5n tropiska Amerika och syd\u00f6stra Asien. K\u00e4nd f\u00f6r sina eleganta vita blommor och m\u00f6rkgr\u00f6na, blanka blad. En av de b\u00e4sta luftrenande v\u00e4xterna enligt NASA. Signalerar tydligt n\u00e4r den beh\u00f6ver vatten genom att bladen sjunker.",
+        "schedule": [
+            0,
+            3,
+            5
+        ],
+        "image": "plant_21.jpg",
+        "room": "Vardagsrum",
+        "placement": "Indirekt ljus, t\u00e5l skugga. Undvik direkt sol.",
+        "repotInterval": 18,
+        "repotTip": "Omplantera n\u00e4r r\u00f6tterna tr\u00e4nger ut. V\u00e5rens b\u00f6rjan \u00e4r b\u00e4st.",
+        "repotted": null
+    },
+    {
+        "id": "Begonia rex",
+        "rule": "L\u00e4tt fuktig jord",
+        "color": "#B85C38",
+        "wiki": "Begonia rex \u00e4r en art i begoniasl\u00e4ktet, ursprungligen fr\u00e5n nord\u00f6stra Indien. Den odlas fr\u00e4mst f\u00f6r sina spektakul\u00e4ra, m\u00f6nstrade blad som kan ha f\u00e4rger i silver, rosa, lila och gr\u00f6nt. Trivs i indirekt ljus och vill ha j\u00e4mnt fuktig jord utan att st\u00e5 bl\u00f6t.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_1.jpg",
+        "room": "Vardagsrum",
+        "placement": "Indirekt ljus, halvskugga. Ingen direkt sol.",
+        "repotInterval": 12,
+        "repotTip": "Omplantera varje v\u00e5r i l\u00e4tt, luftig jord.",
+        "repotted": null
+    },
+    {
+        "id": "Kalatea (Calathea roseopicta)",
+        "rule": "H\u00e5ll j\u00e4mnt fuktig, undvik kalkvatten",
+        "color": "#3A7A9A",
+        "wiki": "Calathea roseopicta \u00e4r en tropisk v\u00e4xt i familjen marantav\u00e4xter, ursprungligen fr\u00e5n Brasilien. K\u00e4nd f\u00f6r sina runda blad med vacker rosa-gr\u00f6n teckning p\u00e5 ovansidan och lila undersida. Trivs i indirekt ljus och h\u00f6g luftfuktighet. Vattna med ljummet, kalkfritt vatten och h\u00e5ll jorden j\u00e4mnt fuktig utan att den blir bl\u00f6t.",
+        "schedule": [
+            0,
+            3,
+            5
+        ],
+        "image": "plant_17.jpg",
+        "room": "Vardagsrum",
+        "placement": "Indirekt ljus, h\u00f6g luftfuktighet. Ingen direkt sol.",
+        "repotInterval": 18,
+        "repotTip": "Omplantera p\u00e5 v\u00e5ren. Anv\u00e4nd humusrik, v\u00e4ldr\u00e4nerad jord.",
+        "repotted": null
+    },
+    {
+        "id": "Echeveria (Succulent)",
+        "rule": "Mycket s\u00e4llan, l\u00e5t torka helt",
+        "color": "#9A7A1A",
+        "wiki": "Echeveria \u00e4r ett sl\u00e4kte suckulenter i familjen fetbladsv\u00e4xter, ursprungligen fr\u00e5n Mexiko och Centralamerika. De bildar eleganta rosetter av k\u00f6ttiga blad i gr\u00f6nt, bl\u00e5tt, rosa eller lila. Beh\u00f6ver mycket ljus och v\u00e4ldigt lite vatten \u2014 l\u00e5t jorden torka ut helt mellan vattningarna.",
+        "schedule": [
+            "rare"
+        ],
+        "image": "plant_23.jpg",
+        "room": "Vardagsrum",
+        "placement": "Starkt direkt ljus, soligt f\u00f6nster. Sval vinterplats.",
+        "repotInterval": 24,
+        "repotTip": "Omplantera vartannat \u00e5r i kaktusjord. L\u00e5t torka efter.",
+        "repotted": null
+    },
+    {
+        "id": "Palettblad",
+        "rule": "H\u00e5ll j\u00e4mnt fuktig \u2014 torkar snabbt",
+        "color": "#B85C38",
+        "wiki": "Palettblad (Coleus/Plectranthus scutellarioides) \u00e4r en fler\u00e5rig \u00f6rt fr\u00e5n Sydostasien med spektakul\u00e4rt flerf\u00e4rgade blad i kombinationer av gr\u00f6nt, r\u00f6tt, rosa, gult och lila. Trivs i ljust till halvskuggigt l\u00e4ge. Torkar ut snabbt och beh\u00f6ver vattnas ofta. Knip av blommor f\u00f6r t\u00e4tare bladv\u00e4xt.",
+        "schedule": [
+            0,
+            3,
+            5
+        ],
+        "image": "plant_16.jpg",
+        "room": "Vardagsrum",
+        "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol.",
+        "repotInterval": 12,
+        "repotTip": "V\u00e4xer snabbt \u2014 omplantera varje v\u00e5r i n\u00e4ringsrik jord.",
+        "repotted": null
+    },
+    {
+        "id": "Skv\u00e4ttiv\u00e4g (Euphorbia leuconeura)",
+        "rule": "L\u00e5t \u00f6versta jorden torka mellan vattningar",
+        "color": "#5A8A5E",
+        "wiki": "Skv\u00e4ttiv\u00e4g (Euphorbia leuconeura) \u00e4r en t\u00f6relv\u00e4xt fr\u00e5n Madagaskar. Kallas skv\u00e4ttiv\u00e4g f\u00f6r att den skjuter iv\u00e4g sina fr\u00f6n med kraft. Har en tjock, kantig stam med dekorativa blad\u00e4rr och m\u00f6rkgr\u00f6na blad med vita bladnerver. Trivs i ljust l\u00e4ge och vill ha regelbunden vattning \u2014 l\u00e5t jorden torka upp i ytan mellan vattningarna.",
+        "schedule": [
+            0
+        ],
+        "image": "plant_14.jpg",
+        "room": "Vardagsrum",
+        "placement": "Ljust l\u00e4ge, lite direkt sol OK. T\u00e5l halvskugga.",
+        "repotInterval": 18,
+        "repotTip": "Omplantera vid behov. Varning: vit mj\u00f6lksaft irriterar huden.",
+        "repotted": null
+    },
+    {
+        "id": "Murgr\u00f6na (Hedera helix)",
+        "rule": "L\u00e5t torka ut mellan vattningar",
+        "color": "#5A8A5E",
+        "wiki": "Murgr\u00f6na (Hedera helix) \u00e4r en kl\u00e4tterv\u00e4xt i familjen araliav\u00e4xter. Den \u00e4r en av f\u00e5 europeiska lianer och kan bli mycket gammal. Som krukv\u00e4xt \u00e4r den popul\u00e4r f\u00f6r sina dekorativa, flikiga blad. Trivs i sval, ljus milj\u00f6 och vill torka ut n\u00e5got mellan vattningarna.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_22.jpg",
+        "room": "Vardagsrum",
+        "placement": "Ljust till halvskuggigt, svalt. Undvik stark sol och v\u00e4rme.",
+        "repotInterval": 24,
+        "repotTip": "Omplantera vartannat \u00e5r eller n\u00e4r r\u00f6tterna fyller krukan.",
+        "repotted": null
+    },
+    {
+        "id": "Skv\u00e4ttiv\u00e4g (Euphorbia leuconeura)",
+        "rule": "L\u00e5t \u00f6versta jorden torka mellan vattningar",
+        "color": "#5A8A5E",
+        "wiki": "Skv\u00e4ttiv\u00e4g (Euphorbia leuconeura) \u00e4r en t\u00f6relv\u00e4xt fr\u00e5n Madagaskar. Kallas skv\u00e4ttiv\u00e4g f\u00f6r att den skjuter iv\u00e4g sina fr\u00f6n med kraft. Har en tjock, kantig stam med dekorativa blad\u00e4rr och m\u00f6rkgr\u00f6na blad med vita bladnerver. Trivs i ljust l\u00e4ge och vill ha regelbunden vattning \u2014 l\u00e5t jorden torka upp i ytan mellan vattningarna.",
+        "schedule": [
+            0
+        ],
+        "image": "plant_15.jpg",
+        "room": "Vardagsrum",
+        "placement": "Ljust l\u00e4ge, lite direkt sol OK. T\u00e5l halvskugga.",
+        "repotInterval": 18,
+        "repotTip": "Omplantera vid behov. Varning: vit mj\u00f6lksaft irriterar huden.",
+        "repotted": null
+    },
+    {
+        "id": "Triangeloxalis",
+        "rule": "Vattna n\u00e4r den b\u00f6rjar h\u00e4nga",
+        "color": "#8A3A3A",
+        "wiki": "Triangeloxalis (Oxalis triangularis) \u00e4r en l\u00f6kv\u00e4xt fr\u00e5n Brasilien med trekantiga, djupt purpurf\u00e4rgade blad som f\u00e4lls ihop p\u00e5 natten och i starkt solljus. Blommar med sm\u00e5 vita eller rosa blommor. Trivs i ljust till halvskuggigt l\u00e4ge. Vattna ordentligt och l\u00e5t sedan jorden torka upp n\u00e5got \u2014 signalerar tydligt behov genom att bladen h\u00e4nger.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_18.jpg",
+        "room": "Vardagsrum",
+        "placement": "Ljust till halvskuggigt. Klarar lite direkt morgonsol.",
+        "repotInterval": 24,
+        "repotTip": "Dela kn\u00f6larna vid omplantering. Vilar p\u00e5 sommaren.",
+        "repotted": null
+    },
+    {
+        "id": "Calathea Orbifolia",
+        "rule": "H\u00e5ll j\u00e4mnt fuktig, h\u00f6g luftfuktighet",
+        "color": "#3A7A9A",
+        "wiki": "Calathea orbifolia \u00e4r en storv\u00e4xt marantav\u00e4xt fr\u00e5n Bolivia med stora, runda blad med silvergr\u00f6na r\u00e4nder. En av de mest dekorativa kalateorna. Kr\u00e4ver h\u00f6g luftfuktighet och j\u00e4mnt fuktig jord. Vattna med kalkfritt vatten och placera i indirekt ljus. K\u00e4nslig f\u00f6r drag och temperaturv\u00e4xlingar.",
+        "schedule": [
+            0,
+            3,
+            5
+        ],
+        "image": "plant_20.jpg",
+        "room": "Vardagsrum",
+        "placement": "Indirekt ljus, h\u00f6g luftfuktighet. K\u00e4nslig f\u00f6r drag.",
+        "repotInterval": 18,
+        "repotTip": "Omplantera p\u00e5 v\u00e5ren i v\u00e4ldr\u00e4nerad, humusrik jord.",
+        "repotted": null
+    },
+    {
+        "id": "Ormbunke (Nephrolepis)",
+        "rule": "Aldrig torr \u2014 vattna frikostigt",
+        "color": "#3A7A9A",
+        "wiki": "Nephrolepis (sv\u00e4rdsbr\u00e4ken) \u00e4r ett sl\u00e4kte av br\u00e4kenv\u00e4xter. Den vanligaste arten i odling \u00e4r Nephrolepis exaltata, k\u00e4nd som Bostonbr\u00e4ken. Den trivs i h\u00f6g luftfuktighet och j\u00e4mnt fuktig jord \u2014 l\u00e5t den aldrig torka ut helt. Perfekt f\u00f6r badrum eller k\u00f6k.",
+        "schedule": [
+            0,
+            3,
+            5
+        ],
+        "image": "plant_13.jpg",
+        "room": "Vardagsrum",
+        "placement": "Halvskugga till indirekt ljus. H\u00f6g luftfuktighet, perfekt i badrum.",
+        "repotInterval": 12,
+        "repotTip": "Omplantera varje v\u00e5r. Dela vid behov. Torvbaserad jord.",
+        "repotted": null
+    },
+    {
+        "id": "Ampellilja",
+        "rule": "H\u00e5ll l\u00e4tt fuktig, t\u00e5l kortare torka",
+        "color": "#5A8A5E",
+        "wiki": "Ampellilja (Chlorophytum comosum) \u00e4r en v\u00e4xtart i familjen sparrisv\u00e4xter fr\u00e5n tropiska Afrika. Som h\u00e4ngv\u00e4xt bildar den eleganta utl\u00f6pare med sm\u00e5plantor. Extremt t\u00e5lig och klarar perioder av torka, men trivs b\u00e4st med j\u00e4mn fukt. En av de b\u00e4sta luftrenande krukv\u00e4xterna.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_19.jpg",
+        "room": "Vardagsrum",
+        "placement": "Ljust till halvskuggigt. T\u00e5l de flesta l\u00e4gen, mycket t\u00e5lig.",
+        "repotInterval": 12,
+        "repotTip": "Omplantera varje v\u00e5r. L\u00e4tt att dela \u2014 plantera ut utl\u00f6parna.",
+        "repotted": null
+    },
+    {
+        "id": "L\u00f6kv\u00e4xt",
+        "rule": "Lite vatten, s\u00e4llan",
+        "color": "#8A6AAB",
+        "wiki": "L\u00f6kv\u00e4xter lagrar energi i en underjordisk l\u00f6k och har ofta en tydlig viloperiod. Under aktiv tillv\u00e4xt och blomning beh\u00f6ver de m\u00e5ttligt med vatten, men under vila ska jorden vara n\u00e4stan torr. Vanliga l\u00f6kv\u00e4xter inomhus inkluderar hyacint, amaryllis och tulpan.",
+        "schedule": [
+            0
+        ],
+        "image": "plant_10.jpg",
+        "room": "K\u00f6k",
+        "placement": "Ljust, svalt l\u00e4ge. Lite direkt sol OK under blomning.",
+        "repotInterval": 0,
+        "repotTip": "L\u00f6kar beh\u00f6ver s\u00e4llan omplantering. Plantera ut efter blomning.",
+        "repotted": null
+    },
+    {
+        "id": "L\u00f6kv\u00e4xt (hyacint?)",
+        "rule": "Lite vatten, s\u00e4llan",
+        "color": "#8A6AAB",
+        "wiki": "Hyacint \u00e4r en fler\u00e5rig blommande l\u00f6kv\u00e4xt med ursprung i syd\u00f6stra Turkiet. Blomf\u00e4rgen kan vara bl\u00e5, vit, ljusgul, rosa, r\u00f6d eller lila. Under viloperioden beh\u00f6ver l\u00f6ken torrt och svalt. Vattna sparsamt \u2014 l\u00f6kar ruttnar l\u00e4tt av f\u00f6r mycket fukt.",
+        "schedule": [
+            0
+        ],
+        "image": "plant_9.jpg",
+        "room": "K\u00f6k",
+        "placement": "Ljust, svalt l\u00e4ge. Direkt sol OK.",
+        "repotInterval": 0,
+        "repotTip": "Hyacintl\u00f6kar planteras ut i tr\u00e4dg\u00e5rden efter blomning.",
+        "repotted": null
+    },
+    {
+        "id": "Plocksallad",
+        "rule": "H\u00e5ll alltid fuktig \u2014 torkar ut snabbt",
+        "color": "#5A8A5E",
+        "wiki": "Plocksallad (Lactuca sativa var. crispa) \u00e4r en snabbv\u00e4xande bladgr\u00f6nsak som l\u00e4tt odlas inomhus p\u00e5 en ljus f\u00f6nsterbr\u00e4da. Sk\u00f6rda blad fr\u00e5n utsidan och l\u00e5t hj\u00e4rtat v\u00e4xa vidare. Kr\u00e4ver mycket ljus och j\u00e4mn fukt \u2014 l\u00e5t aldrig jorden torka ut helt. S\u00e5 nya fr\u00f6n var tredje vecka f\u00f6r kontinuerlig sk\u00f6rd.",
+        "schedule": [
+            0,
+            3,
+            5
+        ],
+        "image": "plant_8.jpg",
+        "room": "K\u00f6k",
+        "placement": "Starkt ljus, g\u00e4rna direkt sol. Solig f\u00f6nsterbr\u00e4da.",
+        "repotInterval": 0,
+        "repotTip": "S\u00e5 om ist\u00e4llet f\u00f6r att omplantera. Ny sk\u00f6rd var 3:e vecka.",
+        "repotted": null
+    },
+    {
+        "id": "Tropisk buske (Kroton)",
+        "rule": "Lite vatten, l\u00e5t n\u00e4stan torka",
+        "color": "#5A8A5E",
+        "wiki": "Kroton (Codiaeum variegatum) \u00e4r en t\u00f6relv\u00e4xt som f\u00f6rst beskrevs av Carl von Linn\u00e9. Namnet kommer fr\u00e5n malajiska 'kodiho' och latin 'variegatum' (brokig). K\u00e4nd f\u00f6r sina intensivt f\u00e4rgade blad i gult, orange, r\u00f6tt och gr\u00f6nt. Trivs i starkt ljus och vill torka upp n\u00e5got mellan vattningarna.",
+        "schedule": [
+            0
+        ],
+        "image": "plant_6.jpg",
+        "room": "K\u00f6k",
+        "placement": "Starkt ljus, g\u00e4rna direkt sol. Tappar f\u00e4rg i skugga.",
+        "repotInterval": 24,
+        "repotTip": "Omplantera vartannat \u00e5r p\u00e5 v\u00e5ren. Tappar blad vid stress.",
+        "repotted": null
+    },
+    {
+        "id": "Saintpaulia",
+        "rule": "Vattna underifr\u00e5n, l\u00e5t ytan torka l\u00e4tt",
+        "color": "#8A6AAB",
+        "wiki": "Saintpaulia (Afrikansk viol) \u00e4r en liten krukv\u00e4xt fr\u00e5n Tanzanias bergsskogar. Blommar rikligt i violett, rosa, vitt eller bl\u00e5tt n\u00e4stan \u00e5ret runt med r\u00e4tt sk\u00f6tsel. Vattna underifr\u00e5n \u2014 bladen \u00e4r k\u00e4nsliga f\u00f6r vattenst\u00e4nk. Trivs i ljust l\u00e4ge utan direkt sol och i rumstemperatur.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_5.jpg",
+        "room": "K\u00f6k",
+        "placement": "Ljust utan direkt sol. Rumstemperatur, k\u00e4nslig f\u00f6r kyla.",
+        "repotInterval": 12,
+        "repotTip": "Omplantera varje \u00e5r i specialjord f\u00f6r saintpaulia. Liten kruka.",
+        "repotted": null
+    },
+    {
+        "id": "P\u00e5sklilja",
+        "rule": "H\u00e5ll j\u00e4mnt l\u00e4tt fuktig",
+        "color": "#8A6AAB",
+        "wiki": "P\u00e5sklilja (Narcissus) \u00e4r en l\u00f6kv\u00e4xt fr\u00e5n Sydeuropa och Nordafrika. Blommar p\u00e5 v\u00e5ren med gula eller vita blommor med en trumpetformad bikrona. Inomhus trivs de i svalt, ljust l\u00e4ge. H\u00e5ll jorden l\u00e4tt fuktig under blomning men undvik \u00f6vervattning. Efter blomning kan l\u00f6ken planteras ut i tr\u00e4dg\u00e5rden.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_4.jpg",
+        "room": "K\u00f6k",
+        "placement": "Ljust, svalt l\u00e4ge. H\u00e5ller sig l\u00e4ngre i sval temperatur.",
+        "repotInterval": 0,
+        "repotTip": "Plantera ut l\u00f6ken i tr\u00e4dg\u00e5rden efter blomning.",
+        "repotted": null
+    },
+    {
+        "id": "P\u00e5sklilja",
+        "rule": "H\u00e5ll j\u00e4mnt l\u00e4tt fuktig",
+        "color": "#8A6AAB",
+        "wiki": "P\u00e5sklilja (Narcissus) \u00e4r en l\u00f6kv\u00e4xt fr\u00e5n Sydeuropa och Nordafrika. Blommar p\u00e5 v\u00e5ren med gula eller vita blommor med en trumpetformad bikrona. Inomhus trivs de i svalt, ljust l\u00e4ge. H\u00e5ll jorden l\u00e4tt fuktig under blomning men undvik \u00f6vervattning. Efter blomning kan l\u00f6ken planteras ut i tr\u00e4dg\u00e5rden.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_11.jpg",
+        "room": "K\u00f6k",
+        "placement": "Ljust, svalt l\u00e4ge. H\u00e5ller sig l\u00e4ngre i sval temperatur.",
+        "repotInterval": 0,
+        "repotTip": "Plantera ut l\u00f6ken i tr\u00e4dg\u00e5rden efter blomning.",
+        "repotted": null
+    },
+    {
+        "id": "Palettblad",
+        "rule": "H\u00e5ll j\u00e4mnt fuktig \u2014 torkar snabbt",
+        "color": "#B85C38",
+        "wiki": "Palettblad (Coleus/Plectranthus scutellarioides) \u00e4r en fler\u00e5rig \u00f6rt fr\u00e5n Sydostasien med spektakul\u00e4rt flerf\u00e4rgade blad i kombinationer av gr\u00f6nt, r\u00f6tt, rosa, gult och lila. Trivs i ljust till halvskuggigt l\u00e4ge. Torkar ut snabbt och beh\u00f6ver vattnas ofta. Knip av blommor f\u00f6r t\u00e4tare bladv\u00e4xt.",
+        "schedule": [
+            0,
+            3,
+            5
+        ],
+        "image": "plant_12.jpg",
+        "room": "K\u00f6k",
+        "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol.",
+        "repotInterval": 12,
+        "repotTip": "V\u00e4xer snabbt \u2014 omplantera varje v\u00e5r i n\u00e4ringsrik jord.",
+        "repotted": null
+    },
+    {
+        "id": "Ampellilja",
+        "rule": "H\u00e5ll l\u00e4tt fuktig, t\u00e5l kortare torka",
+        "color": "#5A8A5E",
+        "wiki": "Ampellilja (Chlorophytum comosum) \u00e4r en v\u00e4xtart i familjen sparrisv\u00e4xter fr\u00e5n tropiska Afrika. Bildar l\u00e5nga utl\u00f6pare med sm\u00e5plantor som h\u00e4nger ned. Extremt t\u00e5lig och en av de mest popul\u00e4ra krukv\u00e4xterna tack vare sin h\u00e4rdighet och luftrenande egenskaper.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_2.jpg",
+        "room": "K\u00f6k",
+        "placement": "Ljust till halvskuggigt. T\u00e5l de flesta l\u00e4gen, mycket t\u00e5lig.",
+        "repotInterval": 12,
+        "repotTip": "Omplantera varje v\u00e5r. L\u00e4tt att dela \u2014 plantera ut utl\u00f6parna.",
+        "repotted": null
+    },
+    {
+        "id": "Kl\u00e4tterkalla",
+        "rule": "L\u00e5t \u00f6versta jorden torka, vattna sedan",
+        "color": "#5A8A5E",
+        "wiki": "Kl\u00e4tterkalla (Scindapsus/Epipremnum) \u00e4r en kl\u00e4ttrande tropisk v\u00e4xt fr\u00e5n Sydostasien. Har hj\u00e4rtformade blad som kan vara gr\u00f6na, marmorerade eller silverm\u00f6nstrade beroende p\u00e5 sort. Mycket l\u00e4ttsk\u00f6tt \u2014 trivs i de flesta ljusf\u00f6rh\u00e5llanden. L\u00e5t jorden torka upp i ytan mellan vattningar. Perfekt h\u00e4ngv\u00e4xt eller kl\u00e4tterv\u00e4xt med st\u00f6d.",
+        "schedule": [
+            0,
+            3
+        ],
+        "image": "plant_3.jpg",
+        "room": "Kontor",
+        "placement": "Ljust till halvskuggigt. T\u00e5l skuggiga l\u00e4gen, mycket anpassningsbar.",
+        "repotInterval": 18,
+        "repotTip": "Omplantera n\u00e4r r\u00f6tterna tr\u00e4nger ut. Vanlig blomjord fungerar.",
+        "repotted": null
+    }
 ]
