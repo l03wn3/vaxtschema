@@ -77,8 +77,21 @@ function lastWateredLabel(history) {
   return `💧 Vattnade ${last.getDate()} ${MON[last.getMonth()]}`;
 }
 
-function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose }) {
+function repotStatus(plant) {
+  if (!plant.repotInterval || plant.repotInterval === 0) return null;
+  if (!plant.repotted) return { label: "Aldrig omplanerad", urgent: true };
+  const last = new Date(plant.repotted);
+  const next = new Date(last);
+  next.setMonth(next.getMonth() + plant.repotInterval);
+  const months = Math.round((next - TODAY) / (1000 * 60 * 60 * 24 * 30));
+  if (months <= 0) return { label: `Dags att omplantera! (senast ${last.getDate()} ${MON[last.getMonth()]} ${last.getFullYear()})`, urgent: true };
+  if (months <= 2) return { label: `Snart dags (om ~${months} mån, senast ${last.getDate()} ${MON[last.getMonth()]} ${last.getFullYear()})`, urgent: false };
+  return { label: `Nästa: ~${MON[next.getMonth()]} ${next.getFullYear()} (senast ${last.getDate()} ${MON[last.getMonth()]} ${last.getFullYear()})`, urgent: false };
+}
+
+function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose, onMarkRepotted }) {
   if (!plant) return null;
+  const repot = repotStatus(plant);
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -89,6 +102,21 @@ function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose }) {
           <h2 className="modal-title">{plant.id}</h2>
           <div className="modal-rule"><span className="modal-rule-icon">💧</span>{plant.rule}</div>
           {plant.placement && <div className="modal-rule" style={{ background: "#F0F7ED" }}><span className="modal-rule-icon">☀️</span>{plant.placement}</div>}
+          {repot && (
+            <div className="modal-rule" style={{ background: repot.urgent ? "#FDF0E0" : "#F5F0E8" }}>
+              <span className="modal-rule-icon">🪴</span>
+              <div style={{ flex: 1 }}>
+                <div>{repot.label}</div>
+                {plant.repotTip && <div style={{ fontSize: 12, color: "#9A8878", marginTop: 2 }}>{plant.repotTip}</div>}
+              </div>
+            </div>
+          )}
+          {repot && (
+            <button onClick={() => onMarkRepotted(pid)} style={{
+              background: "none", border: "1px dashed #8CB87A", borderRadius: 8, padding: "6px 12px",
+              fontSize: 12, color: "#5A8A5E", cursor: "pointer", marginBottom: 12, fontFamily: "'DM Sans', sans-serif"
+            }}>🪴 Markera som omplanerad idag</button>
+          )}
           <div className="modal-schedule">
             {plantDays(pid, weeklyMap, rareGroup).map(d => <span key={d} className="chip">{d}</span>)}
           </div>
@@ -355,6 +383,12 @@ export default function Växtmanual() {
   const isChecked = (dateStr, pid) => (history[dateStr] || []).includes(pid);
   const upcoming = generateUpcoming(plants, weeklyMap, rareGroup);
 
+  const handleMarkRepotted = (pid) => {
+    const updated = [...plants];
+    updated[pid - 1] = { ...updated[pid - 1], repotted: TODAY.toISOString().split("T")[0] };
+    handlePlantsUpdate(updated);
+  };
+
   const handlePlantsUpdate = (updatedPlants) => {
     setPlants(updatedPlants);
     savePlantsToServer(updatedPlants);
@@ -462,6 +496,7 @@ export default function Växtmanual() {
         weeklyMap={weeklyMap}
         rareGroup={rareGroup}
         onClose={() => setModalPlant(null)}
+        onMarkRepotted={handleMarkRepotted}
       />}
 
       <div className="hdr">

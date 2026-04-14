@@ -11,7 +11,10 @@
     ],
     "image": "plant_21.jpg",
     "room": "Vardagsrum",
-    "placement": "Indirekt ljus, tål skugga. Undvik direkt sol."
+    "placement": "Indirekt ljus, tål skugga. Undvik direkt sol.",
+    "repotInterval": 18,
+    "repotTip": "Omplantera när rötterna tränger ut. Vårens början är bäst.",
+    "repotted": null
   },
   {
     "id": "Begonia rex",
@@ -24,7 +27,10 @@
     ],
     "image": "plant_1.jpg",
     "room": "Vardagsrum",
-    "placement": "Indirekt ljus, halvskugga. Ingen direkt sol."
+    "placement": "Indirekt ljus, halvskugga. Ingen direkt sol.",
+    "repotInterval": 12,
+    "repotTip": "Omplantera varje vår i lätt, luftig jord.",
+    "repotted": null
   },
   {
     "id": "Kalatea (Calathea roseopicta)",
@@ -38,7 +44,10 @@
     ],
     "image": "plant_17.jpg",
     "room": "Vardagsrum",
-    "placement": "Indirekt ljus, hög luftfuktighet. Ingen direkt sol."
+    "placement": "Indirekt ljus, hög luftfuktighet. Ingen direkt sol.",
+    "repotInterval": 18,
+    "repotTip": "Omplantera på våren. Använd humusrik, väldränerad jord.",
+    "repotted": null
   },
   {
     "id": "Echeveria (Succulent)",
@@ -50,7 +59,10 @@
     ],
     "image": "plant_23.jpg",
     "room": "Vardagsrum",
-    "placement": "Starkt direkt ljus, soligt fönster. Sval vinterplats."
+    "placement": "Starkt direkt ljus, soligt fönster. Sval vinterplats.",
+    "repotInterval": 24,
+    "repotTip": "Omplantera vartannat år i kaktusjord. Låt torka efter.",
+    "repotted": null
   },
   {
     "id": "Palettblad",
@@ -64,7 +76,10 @@
     ],
     "image": "plant_16.jpg",
     "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol."
+    "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol.",
+    "repotInterval": 12,
+    "repotTip": "Växer snabbt — omplantera varje vår i näringsrik jord.",
+    "repotted": null
   },
   {
     "id": "Skvättiväg (Euphorbia leuconeura)",
@@ -76,7 +91,10 @@
     ],
     "image": "plant_14.jpg",
     "room": "Vardagsrum",
-    "placement": "Ljust läge, lite direkt sol OK. Tål halvskugga."
+    "placement": "Ljust läge, lite direkt sol OK. Tål halvskugga.",
+    "repotInterval": 18,
+    "repotTip": "Omplantera vid behov. Varning: vit mjölksaft irriterar huden.",
+    "repotted": null
   },
   {
     "id": "Murgröna (Hedera helix)",
@@ -89,7 +107,10 @@
     ],
     "image": "plant_22.jpg",
     "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt, svalt. Undvik stark sol och värme."
+    "placement": "Ljust till halvskuggigt, svalt. Undvik stark sol och värme.",
+    "repotInterval": 24,
+    "repotTip": "Omplantera vartannat år eller när rötterna fyller krukan.",
+    "repotted": null
   },
   {
     "id": "Skvättiväg (Euphorbia leuconeura)",
@@ -101,7 +122,10 @@
     ],
     "image": "plant_15.jpg",
     "room": "Vardagsrum",
-    "placement": "Ljust läge, lite direkt sol OK. Tål halvskugga."
+    "placement": "Ljust läge, lite direkt sol OK. Tål halvskugga.",
+    "repotInterval": 18,
+    "repotTip": "Omplantera vid behov. Varning: vit mjölksaft irriterar huden.",
+    "repotted": null
   },
   {
     "id": "Triangeloxalis",
@@ -114,7 +138,10 @@
     ],
     "image": "plant_18.jpg",
     "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt. Klarar lite direkt morgonsol."
+    "placement": "Ljust till halvskuggigt. Klarar lite direkt morgonsol.",
+    "repotInterval": 24,
+    "repotTip": "Dela knölarna vid omplantering. Vilar på sommaren.",
+    "repotted": null
   },
   {
     "id": "Calathea Orbifolia",
@@ -128,7 +155,10 @@
     ],
     "image": "plant_20.jpg",
     "room": "Vardagsrum",
-    "placement": "Indirekt ljus, hög luftfuktighet. Känslig för drag."
+    "placement": "Indirekt ljus, hög luftfuktighet. Känslig för drag.",
+    "repotInterval": 18,
+    "repotTip": "Omplantera på våren i väldränerad, humusrik jord.",
+    "repotted": null
   },
   {
     "id": "Ormbunke (Nephrolepis)",
@@ -142,7 +172,10 @@
     ],
     "image": "plant_13.jpg",
     "room": "Vardagsrum",
-    "placement": "Halvskugga till indirekt ljus. Hög luftfuktighet, perfekt i badrum."
+    "placement": "Halvskugga till indirekt ljus. Hög luftfuktighet, perfekt i badrum.",
+    "repotInterval": 12,
+    "repotTip": "Omplantera varje vår. Dela vid behov. Torvbaserad jord.",
+    "repotted": null
   },
   {
     "id": "Ampellilja",
@@ -155,7 +188,10 @@
     ],
     "image": "plant_19.jpg",
     "room": "Vardagsrum",
-    "placement": "Ljust till halvskuggigt. Tål de flesta lägen, mycket tålig."
+    "placement": "Ljust till halvskuggigt. Tål de flesta lägen, mycket tålig.",
+    "repotInterval": 12,
+    "repotTip": "Omplantera varje vår. Lätt att dela — plantera ut utlöparna.",
+    "repotted": null
   },
   {
     "id": "Lökväxt",
@@ -167,7 +203,10 @@
     ],
     "image": "plant_10.jpg",
     "room": "Kök",
-    "placement": "Ljust, svalt läge. Lite direkt sol OK under blomning."
+    "placement": "Ljust, svalt läge. Lite direkt sol OK under blomning.",
+    "repotInterval": 0,
+    "repotTip": "Lökar behöver sällan omplantering. Plantera ut efter blomning.",
+    "repotted": null
   },
   {
     "id": "Lökväxt (hyacint?)",
@@ -179,7 +218,10 @@
     ],
     "image": "plant_9.jpg",
     "room": "Kök",
-    "placement": "Ljust, svalt läge. Direkt sol OK."
+    "placement": "Ljust, svalt läge. Direkt sol OK.",
+    "repotInterval": 0,
+    "repotTip": "Hyacintlökar planteras ut i trädgården efter blomning.",
+    "repotted": null
   },
   {
     "id": "Plocksallad",
@@ -193,7 +235,10 @@
     ],
     "image": "plant_8.jpg",
     "room": "Kök",
-    "placement": "Starkt ljus, gärna direkt sol. Solig fönsterbräda."
+    "placement": "Starkt ljus, gärna direkt sol. Solig fönsterbräda.",
+    "repotInterval": 0,
+    "repotTip": "Så om istället för att omplantera. Ny skörd var 3:e vecka.",
+    "repotted": null
   },
   {
     "id": "Tropisk buske (Kroton)",
@@ -205,7 +250,10 @@
     ],
     "image": "plant_6.jpg",
     "room": "Kök",
-    "placement": "Starkt ljus, gärna direkt sol. Tappar färg i skugga."
+    "placement": "Starkt ljus, gärna direkt sol. Tappar färg i skugga.",
+    "repotInterval": 24,
+    "repotTip": "Omplantera vartannat år på våren. Tappar blad vid stress.",
+    "repotted": null
   },
   {
     "id": "Saintpaulia",
@@ -218,7 +266,10 @@
     ],
     "image": "plant_5.jpg",
     "room": "Kök",
-    "placement": "Ljust utan direkt sol. Rumstemperatur, känslig för kyla."
+    "placement": "Ljust utan direkt sol. Rumstemperatur, känslig för kyla.",
+    "repotInterval": 12,
+    "repotTip": "Omplantera varje år i specialjord för saintpaulia. Liten kruka.",
+    "repotted": null
   },
   {
     "id": "Påsklilja",
@@ -231,7 +282,10 @@
     ],
     "image": "plant_4.jpg",
     "room": "Kök",
-    "placement": "Ljust, svalt läge. Håller sig längre i sval temperatur."
+    "placement": "Ljust, svalt läge. Håller sig längre i sval temperatur.",
+    "repotInterval": 0,
+    "repotTip": "Plantera ut löken i trädgården efter blomning.",
+    "repotted": null
   },
   {
     "id": "Mynta",
@@ -245,7 +299,10 @@
     ],
     "image": "plant_7.jpg",
     "room": "Kök",
-    "placement": "Ljust till halvskuggigt. Solig fönsterbräda i kök är perfekt."
+    "placement": "Ljust till halvskuggigt. Solig fönsterbräda i kök är perfekt.",
+    "repotInterval": 12,
+    "repotTip": "Omplantera varje vår — växer aggressivt och fyller krukan snabbt.",
+    "repotted": null
   },
   {
     "id": "Påsklilja",
@@ -258,7 +315,10 @@
     ],
     "image": "plant_11.jpg",
     "room": "Kök",
-    "placement": "Ljust, svalt läge. Håller sig längre i sval temperatur."
+    "placement": "Ljust, svalt läge. Håller sig längre i sval temperatur.",
+    "repotInterval": 0,
+    "repotTip": "Plantera ut löken i trädgården efter blomning.",
+    "repotted": null
   },
   {
     "id": "Palettblad",
@@ -272,7 +332,10 @@
     ],
     "image": "plant_12.jpg",
     "room": "Kök",
-    "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol."
+    "placement": "Ljust till halvskuggigt. Morgonsol OK, undvik stark middagssol.",
+    "repotInterval": 12,
+    "repotTip": "Växer snabbt — omplantera varje vår i näringsrik jord.",
+    "repotted": null
   },
   {
     "id": "Ampellilja",
@@ -285,7 +348,10 @@
     ],
     "image": "plant_2.jpg",
     "room": "Kök",
-    "placement": "Ljust till halvskuggigt. Tål de flesta lägen, mycket tålig."
+    "placement": "Ljust till halvskuggigt. Tål de flesta lägen, mycket tålig.",
+    "repotInterval": 12,
+    "repotTip": "Omplantera varje vår. Lätt att dela — plantera ut utlöparna.",
+    "repotted": null
   },
   {
     "id": "Klätterkalla",
@@ -298,6 +364,9 @@
     ],
     "image": "plant_3.jpg",
     "room": "Kontor",
-    "placement": "Ljust till halvskuggigt. Tål skuggiga lägen, mycket anpassningsbar."
+    "placement": "Ljust till halvskuggigt. Tål skuggiga lägen, mycket anpassningsbar.",
+    "repotInterval": 18,
+    "repotTip": "Omplantera när rötterna tränger ut. Vanlig blomjord fungerar.",
+    "repotted": null
   }
 ]
