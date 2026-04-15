@@ -351,5 +351,23 @@
         "repotInterval": 18,
         "repotTip": "Omplantera n\u00e4r r\u00f6tterna tr\u00e4nger ut. Vanlig blomjord fungerar.",
         "repotted": null
+    },
+    {
+        "id": "Basilika",
+        "rule": "Håll jämnt fuktig — torkar snabbt ut",
+        "color": "#5A8A5E",
+        "wiki": "Basilika (Ocimum basilicum) är en aromatisk ört i familjen kransblommiga, ursprungligen från tropiska Asien och Afrika. En av världens mest använda kryddväxter, populär i italienskt och thailändskt kök. Trivs i värme och sol, och behöver regelbunden vattning — jorden ska hållas jämnt fuktig men inte blöt. Knip av blomknoppar för att förlänga skörden och hålla plantan frodig.",
+        "schedule": [
+            0,
+            2,
+            4,
+            6
+        ],
+        "image": "plant_1776260232431_4g7qtilff.jpg",
+        "room": "Kök",
+        "placement": "Full sol, minst 6 timmar direkt ljus. Fönsterbräda mot söder är perfekt.",
+        "repotInterval": 0,
+        "repotTip": "Ettårig ört — omplantering sällan nödvändig. Så ny vid behov.",
+        "repotted": null
     }
 ]
