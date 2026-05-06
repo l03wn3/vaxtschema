@@ -8,6 +8,7 @@ import sharp from "sharp";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_FILE = join(__dirname, "data", "history.json");
 const PLANTS_FILE = join(__dirname, "data", "plants.json");
+const REPOT_FILE = join(__dirname, "data", "repot.json");
 const PLANTS_DIR = join(__dirname, "public", "plants");
 const PLANTS_HIRES_DIR = join(PLANTS_DIR, "hires");
 const PORT = 3001;
@@ -42,6 +43,17 @@ function savePlants(plants) {
   writeFileSync(PLANTS_FILE, JSON.stringify(plants, null, 2));
 }
 
+function loadRepot() {
+  try {
+    if (existsSync(REPOT_FILE)) return JSON.parse(readFileSync(REPOT_FILE, "utf8"));
+  } catch {}
+  return {};
+}
+
+function saveRepot(data) {
+  writeFileSync(REPOT_FILE, JSON.stringify(data, null, 2));
+}
+
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
@@ -68,6 +80,16 @@ app.post("/api/plants", (req, res) => {
     return res.status(400).json({ error: "plants must be an array" });
   }
   savePlants(plants);
+  res.json({ ok: true });
+});
+
+// Repot tracking endpoints
+app.get("/api/repot", (_req, res) => {
+  res.json(loadRepot());
+});
+
+app.post("/api/repot", (req, res) => {
+  saveRepot(req.body);
   res.json({ ok: true });
 });
 

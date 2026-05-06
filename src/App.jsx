@@ -17,6 +17,12 @@ async function loadHistoryFromServer() {
 function saveHistoryToServer(h) {
   fetch("/api/history", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(h) }).catch(() => {});
 }
+async function loadRepotFromServer() {
+  try { const r = await fetch("/api/repot"); return r.ok ? await r.json() : {}; } catch { return {}; }
+}
+function saveRepotToServer(r) {
+  fetch("/api/repot", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(r) }).catch(() => {});
+}
 async function savePlantsToServer(plants) {
   try { await fetch("/api/plants", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plants }) }); }
   catch (err) { console.error("Failed to save plants:", err); }
@@ -87,6 +93,55 @@ function repotStatus(plant) {
   if (months <= 0) return { label: `Dags att omplantera! (senast ${last.getDate()} ${MON[last.getMonth()]} ${last.getFullYear()})`, urgent: true };
   if (months <= 2) return { label: `Snart dags (om ~${months} mån, senast ${last.getDate()} ${MON[last.getMonth()]} ${last.getFullYear()})`, urgent: false };
   return { label: `Nästa: ~${MON[next.getMonth()]} ${next.getFullYear()} (senast ${last.getDate()} ${MON[last.getMonth()]} ${last.getFullYear()})`, urgent: false };
+}
+
+const repotPriorityMeta = {
+  high:   { label: "Hög prioritet",   color: "#B85C38", icon: "🪴", hint: "Plantera om nu — maj är perfekt timing." },
+  medium: { label: "Kanske",          color: "#9A7A1A", icon: "🔍", hint: "Lyft ur krukan och kolla rotklumpen — avgör efter syn." },
+  low:    { label: "Låg prioritet",   color: "#5A8A5E", icon: "✋", hint: "Bara om något tydligt skriker efter ny kruka." },
+  skip:   { label: "Hoppa över nu",   color: "#9A8878", icon: "⏸", hint: "Lökar, sticklingar och kaktus — egna regler." },
+};
+
+const REPOT_GUIDE_STEPS = [
+  { title: "Vattna lätt dagen innan", body: "Fuktig jord släpper krukan lättare och växten klarar omplanteringen bättre om den inte är torr." },
+  { title: "Få ut växten", body: "Lägg krukan på sidan, tryck/bulta lätt på kanten. Greppa stammen nära jorden och dra varsamt. Aldrig ryck i bladen — kör en smörkniv runt kanten om den sitter fast." },
+  { title: "Inspektera rotklumpen", body: "Tät snurr av vita/ljusbruna rötter = omplantera. Mörkbruna mjuka rötter = klipp bort med ren sax. Mycket jord kvar = ställ tillbaka, byt bara översta lagret." },
+  { title: "Lossa rötterna", body: "Krama klumpen försiktigt, peta ut snurrade rötter med fingrarna. Är klumpen stenhård kan du göra fyra grunda vertikala snitt på sidorna — låter brutalt men stimulerar nya rötter." },
+  { title: "Förbered nya krukan", body: "2–3 cm bredare i diameter än den gamla, inte mer. Lägg ett par cm jord i botten. Vid stora hål kan en krukskärva läggas över så jorden inte rinner ut." },
+  { title: "Sätt i växten", body: "Centrera så toppen av rotklumpen hamnar 1–2 cm under krukkanten. För högt = jord skvätter vid vattning. För lågt = stammen kan ruttna." },
+  { title: "Fyll på jord", body: "Lite i taget runt om, tryck till lätt med fingrarna. Inga luftfickor men inte heller hårt packat. Skaka krukan så jorden sätter sig." },
+  { title: "Vattna ordentligt", body: "Tills det rinner ut underst. Det 'tätar' jorden runt rötterna. Fyll på lite mer jord om nivån sjunker märkbart." },
+  { title: "Skona växten 1–2 veckor", body: "Lugn plats, ingen direktsol, inget drag. Vänta 4–6 veckor med att gödsla — ny jord har redan näring." },
+];
+
+function RepotGuideModal({ onClose }) {
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>✕</button>
+        <div className="modal-body" style={{ paddingTop: 28 }}>
+          <h2 className="modal-title">🪴 Så omplanterar du</h2>
+          <p style={{ fontSize: 13, color: "#6B5538", marginBottom: 16, lineHeight: 1.5 }}>
+            Räkna med ~30 min per växt första gången. Du behöver: ny kruka 2–3 cm bredare, krukväxtjord, kanna vatten, tidningspapper.
+          </p>
+          <ol className="guide-list">
+            {REPOT_GUIDE_STEPS.map((step, i) => (
+              <li key={i} className="guide-step">
+                <div className="guide-step-num">{i + 1}</div>
+                <div>
+                  <div className="guide-step-title">{step.title}</div>
+                  <div className="guide-step-body">{step.body}</div>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="guide-warn">
+            <strong>Vanligaste misstagen:</strong> för stor ny kruka (rötter ruttnar), planterad djupare än innan (stammen ruttnar), gödsla direkt efter (vänta 4–6 veckor).
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function PlantModal({ plant, pid, weeklyMap, rareGroup, onClose, onMarkRepotted }) {
@@ -350,13 +405,16 @@ export default function Växtmanual() {
   const [tab, setTab] = useState("schema");
   const [plants, setPlants] = useState([]);
   const [history, setHistory] = useState({});
+  const [repot, setRepot] = useState({});
   const [loaded, setLoaded] = useState(false);
+  const [repotLoaded, setRepotLoaded] = useState(false);
   const [modalPlant, setModalPlant] = useState(null);
+  const [showGuide, setShowGuide] = useState(false);
   const [weeklyMap, setWeeklyMap] = useState({});
   const [rareGroup, setRareGroup] = useState([]);
 
   useEffect(() => {
-    Promise.all([loadPlants(), loadHistoryFromServer()]).then(([p, h]) => {
+    Promise.all([loadPlants(), loadHistoryFromServer(), loadRepotFromServer()]).then(([p, h, r]) => {
       setPlants(p);
       if (p.length > 0) {
         const maps = deriveScheduleMaps(p);
@@ -364,11 +422,24 @@ export default function Växtmanual() {
         setRareGroup(maps.rareGroup);
       }
       setHistory(purgeOld(h));
+      setRepot(r || {});
       setLoaded(true);
+      setRepotLoaded(true);
     });
   }, []);
 
   useEffect(() => { if (loaded) saveHistoryToServer(history); }, [history, loaded]);
+  useEffect(() => { if (repotLoaded) saveRepotToServer(repot); }, [repot, repotLoaded]);
+
+  const todayStr = TODAY.toISOString().split("T")[0];
+  const toggleRepot = (pid) => {
+    setRepot(prev => {
+      const next = { ...prev };
+      if (next[pid] === todayStr) delete next[pid];
+      else next[pid] = todayStr;
+      return next;
+    });
+  };
 
   const toggle = (dateStr, pid) => {
     setHistory(prev => {
@@ -467,6 +538,31 @@ export default function Växtmanual() {
         .modal-schedule { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
         .modal-wiki { font-size: 14px; line-height: 1.6; color: #4A4030; }
 
+        /* Repot tab */
+        .repot-progress { display: flex; justify-content: space-between; font-size: 12px; color: #6B5538; background: white; padding: 10px 14px; border-radius: 10px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); font-weight: 500; }
+        .repot-hint { font-size: 12px; color: #6B5538; font-style: italic; margin: 0 2px 8px; line-height: 1.4; }
+        .repot-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F0EBE0; -webkit-tap-highlight-color: transparent; }
+        .repot-row:last-child { border-bottom: none; }
+        .repot-reason { font-size: 12.5px; color: #6B5538; font-weight: 300; margin-top: 3px; line-height: 1.4; }
+        .repot-last { font-size: 11px; color: #5A8A5E; margin-top: 4px; font-weight: 600; }
+        .repot-btn { background: #1E3A0E; color: #F5F0E8; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; flex-shrink: 0; align-self: center; -webkit-tap-highlight-color: transparent; }
+        .repot-btn.done { background: #8CB87A; color: white; }
+        .repot-btn:active { opacity: 0.7; }
+        .guide-btn { background: #1E3A0E; color: #F5F0E8; border: none; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; margin-bottom: 14px; -webkit-tap-highlight-color: transparent; }
+        .guide-btn:active { opacity: 0.8; }
+        .guide-list { list-style: none; padding: 0; margin: 0; }
+        .guide-step { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #E8E0D5; }
+        .guide-step:last-child { border-bottom: none; }
+        .guide-step-num { background: #8CB87A; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+        .guide-step-title { font-weight: 600; font-size: 14px; color: #1E3A0E; margin-bottom: 3px; }
+        .guide-step-body { font-size: 13px; color: #4A4030; line-height: 1.5; }
+        .guide-warn { background: #FDF5E6; border-left: 3px solid #B85C38; padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: 12.5px; color: #6B5538; line-height: 1.5; margin-top: 16px; }
+        .all-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 14px; }
+        .all-disclaimer { font-size: 11.5px; color: #9A8878; margin: 0 0 12px; font-style: italic; line-height: 1.4; }
+        .all-row-right { flex: 1; }
+        .all-name { font-size: 14px; font-weight: 500; }
+        .sec-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #9A8878; margin: 18px 0 8px; }
+
         /* Admin */
         .admin-container { padding: 0; }
         .admin-section { background: white; border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
@@ -490,6 +586,7 @@ export default function Växtmanual() {
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
       `}</style>
 
+      {showGuide && <RepotGuideModal onClose={() => setShowGuide(false)} />}
       {modalPlant !== null && <PlantModal
         plant={plants[modalPlant - 1]}
         pid={modalPlant}
@@ -511,11 +608,13 @@ export default function Växtmanual() {
         <div className="tabs">
           <button className={`tab-btn ${tab === "schema" ? "active" : ""}`} onClick={() => setTab("schema")}>Kommande</button>
           <button className={`tab-btn ${tab === "plants" ? "active" : ""}`} onClick={() => setTab("plants")}>Alla växter</button>
+          <button className={`tab-btn ${tab === "repot" ? "active" : ""}`} onClick={() => setTab("repot")}>Omplantering</button>
           <button className={`tab-btn ${tab === "admin" ? "active" : ""}`} onClick={() => setTab("admin")}>Admin</button>
         </div>
       </div>
 
       {tab === "schema" && <div className="notice">📖 <strong>Schema: Söndag + Onsdag + Fredag.</strong></div>}
+      {tab === "repot" && <div className="notice">🪴 <strong>Maj är högsäsong för omplantering.</strong> Bocka av varje växt när du gjort den.</div>}
 
       <div className="content">
         {tab === "schema" ? (
@@ -557,6 +656,69 @@ export default function Växtmanual() {
               </div>
             );
           })
+        ) : tab === "repot" ? (
+          <>
+            <p className="all-disclaimer">Maj är bästa tiden att plantera om. Förslaget bygger på art och växttakt — kolla alltid rotklumpen själv innan du bestämmer.</p>
+            <button className="guide-btn" onClick={() => setShowGuide(true)}>📖 Läs hur du omplanterar (steg för steg)</button>
+            {(() => {
+              const order = ["high", "medium", "low", "skip"];
+              const eligible = plants.filter(p => p.repotPriority && p.repotPriority !== "skip").length;
+              const done = Object.keys(repot).filter(k => repot[k]).length;
+              return (
+                <>
+                  <div className="repot-progress">
+                    <span>{done} av {eligible} markerade som gjorda</span>
+                    <span>{eligible > 0 ? Math.round((done / eligible) * 100) : 0}%</span>
+                  </div>
+                  {order.map(prio => {
+                    const grouped = plants
+                      .map((p, idx) => ({ ...p, pid: idx + 1 }))
+                      .filter(p => (p.repotPriority || "medium") === prio);
+                    if (grouped.length === 0) return null;
+                    const meta = repotPriorityMeta[prio];
+                    return (
+                      <div key={prio}>
+                        <div className="sec-label" style={{ color: meta.color }}>
+                          {meta.icon} {meta.label} ({grouped.length})
+                        </div>
+                        <div className="repot-hint">{meta.hint}</div>
+                        <div className="all-card">
+                          {grouped.map(p => {
+                            const lastDate = repot[p.pid];
+                            const isDone = lastDate === todayStr;
+                            return (
+                              <div className="repot-row" key={p.pid}>
+                                <div className="thumb" onClick={() => setModalPlant(p.pid)}>
+                                  <img src={`/plants/${p.image}`} alt={`#${p.pid}`} width={52} height={52}
+                                    style={{ opacity: isDone ? 0.45 : 1, filter: isDone ? "grayscale(70%)" : "none" }} />
+                                  <div className="thumb-badge" style={{ background: isDone ? "#C4B8A8" : meta.color }}>{p.pid}</div>
+                                </div>
+                                <div className="all-row-right" onClick={() => setModalPlant(p.pid)} style={{ opacity: isDone ? 0.55 : 1 }}>
+                                  <div className="all-name">{p.id}</div>
+                                  <div className="repot-reason">{p.repotReason || "Kolla rotklumpen."}</div>
+                                  {lastDate && (
+                                    <div className="repot-last">Senast omplanerad: {lastDate === todayStr ? "idag" : lastDate}</div>
+                                  )}
+                                </div>
+                                {prio !== "skip" && (
+                                  <button
+                                    className={`repot-btn ${isDone ? "done" : ""}`}
+                                    onClick={() => toggleRepot(p.pid)}
+                                  >
+                                    {isDone ? "✓" : "Markera"}
+                                  </button>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              );
+            })()}
+          </>
         ) : tab === "plants" ? (
           <>
             {Object.entries(plantsByRoom).map(([room, roomPlants]) => (
